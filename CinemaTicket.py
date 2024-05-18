@@ -1,5 +1,6 @@
 
 from User import User , User_Application
+from Date import Date
 
 
 
@@ -9,7 +10,10 @@ while True:
     if a == '1':
         try:
             User_Application.sign_up()
-            print('Registration was successfull','\n')
+
+            Date.Birthday()
+            print(Date.users_info)
+
 
         except ValueError:
             print('try again')
