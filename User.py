@@ -1,6 +1,7 @@
 
 import re,getpass,hashlib,uuid
 
+
 class User:
     ''' the coorect conditions for receiving entry in this class are determined'''
     users_info = {}
@@ -18,7 +19,7 @@ class User:
         ''' only valid names are allowed to register'''
 
         if len(Username) == 0:
-            print('username must have at least 1 letter')
+            print('username must have at least 1 letter\n')
             raise ValueError
 
         self.names.append(Username)
@@ -153,7 +154,7 @@ class User_Application(User):
                 self.new_password()
 
             elif b == '4':
-                print('you have logged out of your account')
+                print('you have logged out of your account\n')
                 break
 
             else:
@@ -161,13 +162,18 @@ class User_Application(User):
 
 
     def __str__(self):
+        from Date import Date
         ''' it allows the user to viewing information'''
         print(
-            f'username is: {self.Username} \nphone_number is: {self.phone_number} \nuser id is: {self.iid}')
+            f'username is: {self.Username} \nphone_number is: {self.phone_number}'
+            f' \nuser id is: {self.iid} \nuser birthday is: {Date.users_info[self.Username][4]}'
+            f'\nThe date of Registration is: {Date.users_info[self.Username][5]}')
 
 
     def edit_profile(self):
         ''' it allows the user to editing profile'''
+
+        from Date import Date
 
         old_Username = self.Username
         old_phone_number = self.phone_number
@@ -190,6 +196,13 @@ class User_Application(User):
         except ValueError:
             pass
 
+        answer = input('do you want change your birthday(yes/no)?\n ')
+        if answer == 'yes':
+            birthday = Date.users_info[self.Username][4]
+            Date.change_Birthday(self.Username,birthday)
+        else:
+            ValueError
+
 
     @staticmethod
     def change_password(new_password:str,users_info:dict,Username:str,hash_password):
@@ -198,5 +211,5 @@ class User_Application(User):
 
         users_info[Username][1] = new_password
         users_info[Username][3] = hash_password
-        print('your password changed')
+        print('your password changed\n')
 
