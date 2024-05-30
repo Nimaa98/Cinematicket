@@ -1,17 +1,21 @@
 
 from User import User , User_Application
 from Date import Date
+from noSQL_Database import Nosql_database
+
 
 
 
 
 while True:
+
     a = input('press 1 to register or 2 to Login or 0 to exit: ')
     if a == '1':
         try:
             User_Application.sign_up()
+            Username = User.names[-1]
 
-            Date.Birthday()
+            Date.Birthday(Username)
             print(Date.users_info)
 
 
@@ -22,7 +26,8 @@ while True:
         User_Application.Login()
 
     elif a=='0':
-        print(User.users_info)
+        #Nosql_database.Check()
+        #print(User.users_info)
         break
 
     else:
