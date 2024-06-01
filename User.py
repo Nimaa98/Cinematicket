@@ -1,6 +1,8 @@
 
 import re,getpass,hashlib,uuid
 from noSQL_Database import Nosql_database
+from connect_postgre import Pgadmin
+
 
 
 class User:
@@ -99,6 +101,8 @@ class User:
             print('your password changed\n')
 
             Nosql_database.Edit_data(user_data, old_Username, Username)
+            Pgadmin.Edit(new_password,Username,'password')
+
 
 
 
@@ -221,6 +225,7 @@ class User_Application(User):
 
                 user_data[Username] = user_data.pop(old_Username)
                 Nosql_database.Edit_data(user_data,old_Username,Username)
+                Pgadmin.Edit(Username,old_Username,'username')
 
 
             if User.names.count(old_Username) == 1:
@@ -244,6 +249,7 @@ class User_Application(User):
                 user_data[Username][0] = phone_number
 
             Nosql_database.Edit_data(user_data, old_Username, Username)
+            Pgadmin.Edit(phone_number,Username,'phone_number')
 
         except ValueError:
             print('incorrect input\n')

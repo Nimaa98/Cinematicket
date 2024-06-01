@@ -2,6 +2,7 @@
 from User import User , User_Application
 from Date import Date
 from noSQL_Database import Nosql_database
+#from connect_postgre import Pgadmin ,cursor_obj
 
 
 
@@ -28,6 +29,10 @@ while True:
     elif a=='0':
         #Nosql_database.Check()
         #print(User.users_info)
+
+        #cursor_obj.close()
+        #con.close()
+
         break
 
     else:
