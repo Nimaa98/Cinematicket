@@ -1,7 +1,12 @@
 import json
+import numpy as np
+
+
 class Nosql_database:
     data = {}
     repet = 'No'
+    cart_numbers = []
+    name = ''
 
     @classmethod
     def Add(cls,users_info):
@@ -43,10 +48,54 @@ class Nosql_database:
 
             data[Username] = user_data[Username]
 
-            print('data keys is: ',data.keys())
-
         with open('users_info.json', '+w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
+
+
+    @staticmethod
+    def Check_cart_numbers(cart_number):
+
+        name = ''
+        other_Username = ''
+        other_user_data = {}
+
+        with open('users_info.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+        for i,j in data.items():
+
+            key = j[6].keys()
+
+            if cart_number in list(key):
+
+                name = j[6][cart_number][0]
+                other_Username = i
+                other_user_data = {i:data[i]}
+
+                return False , name , other_Username,other_user_data
+
+        return True , name , other_Username,other_user_data
+
+
+    @staticmethod
+    def Accounts_info(Username):
+
+        with open('users_info.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+
+            user_data = data[Username][6]
+            print(user_data)
+
+            return user_data
+
+
+
+
+
+
+
+
+
 
 
 

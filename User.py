@@ -2,6 +2,8 @@
 import re,getpass,hashlib,uuid
 from noSQL_Database import Nosql_database
 from connect_postgre import Pgadmin
+from Subscription import Wallet , Manage
+
 
 
 
@@ -23,16 +25,13 @@ class User:
     def set_Username(self,Username:str):
         ''' only valid names are allowed to register'''
         result, user_data = Nosql_database.Check(Username)
-        print(user_data)
 
-        if len(Username) == 0:
+        if len(Username) == 0 or Username.isdigit():
             print('username must have at least 1 letter\n')
             raise ValueError
 
 
         self.names.append(Username)
-        print(user_data)
-        print(self.names.count(Username))
         if self.names.count(Username) == 2 or result:
             print('the entered name is duplicate or has been selected by another user.\n')
             self.names.remove((Username))
@@ -87,10 +86,10 @@ class User:
             print('incorrect password')
 
         elif old_password == new_password_1:
-            print('the entered password is duplicate')
+            print('the entered password is duplicate.\n')
 
         elif new_password_1 != new_password_2:
-            print('the entered passwords do not match')
+            print('the entered passwords do not match.\n')
         else:
             new_password = new_password_1
             self.__password = new_password
@@ -98,7 +97,7 @@ class User:
 
             user_data[Username][1] = new_password
             user_data[Username][3] = hash_password
-            print('your password changed\n')
+            print('your password changed.\n')
 
             Nosql_database.Edit_data(user_data, old_Username, Username)
             Pgadmin.Edit(new_password,Username,'password')
@@ -118,9 +117,9 @@ class User_Application(User):
     def sign_up(cls):
         ''' registers new users'''
 
-        Username = input('Enter your username:')
-        phone_number = input('Enter your phone number:')
-        password = getpass.getpass('Enter your password:')
+        Username = input('Enter your username:\n')
+        phone_number = input('Enter your phone number:\n')
+        password = getpass.getpass('Enter your password:\n')
 
         iid = uuid.uuid5(uuid.NAMESPACE_DNS,Username)
 
@@ -136,22 +135,24 @@ class User_Application(User):
 
         cls.users_info[Username] = [phone_number,password,iid,hash_password]
 
+        return Username
+
 
     @classmethod
     def Login(cls):
         ''' if the correct information is enterd, the user will be allowed to enter the account'''
 
 
-        Username = input('Enter your username to Login:')
+        Username = input('Enter your username to Login:\n')
 
         result ,cls.user_data = Nosql_database.Check(Username)
 
         if Username not in cls.users_info and not result:
 
-            print('No user found with this name')
+            print('No user found with this name.\n')
 
         else:
-            password = getpass.getpass('Enter your password:')
+            password = getpass.getpass('Enter your password:\n')
             if cls.hash_password(password) == cls.user_data[Username][3]:
 
                 print('\nLogin was done successfully\n')
@@ -163,12 +164,15 @@ class User_Application(User):
                 instance.User_account()
 
             else:
-                print('incorrect password')
+                print('incorrect password.\n')
 
     def User_account(self):
         ''' it allows the user to choose between viewing information,editing and changing the password'''
 
         from Date import Date
+        from bank_acounts import Bank_accounts
+
+        Wallet.Auto_Change_subscription(self.Username,self.user_data)
 
         while True:
             b = input('press 1 to see your informations\n'
@@ -176,7 +180,9 @@ class User_Application(User):
                       '3 to change phone number\n'
                       '4 to edit birthday\n'
                       '5 to change password\n'
-                      '6 to exit\n')
+                      '6 to manage your bank accounts\n'
+                      '7 to manage your wallet and subscription\n'
+                      '0 to exit\n')
 
             if b == '1':
                 self.__str__()
@@ -193,6 +199,14 @@ class User_Application(User):
                 self.new_password(self.user_data,self.Username)
 
             elif b == '6':
+
+                Bank_accounts.Manage_accounts(self.Username,self.user_data)
+
+            elif b == '7':
+
+                Manage.Manage_wallet(self.Username,self.user_data)
+
+            elif b == '0':
                 print('you have logged out of your account\n')
                 break
 
