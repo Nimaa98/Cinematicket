@@ -1,11 +1,18 @@
 
 import re,getpass,hashlib,uuid
+from noSQL_Database import Nosql_database
+from connect_postgre import Pgadmin
+from Subscription import Wallet , Manage
+
+
 
 
 class User:
     ''' the coorect conditions for receiving entry in this class are determined'''
     users_info = {}
     names = []
+
+
 
     def __init__(self,Username:str,phone_number:str ,password:str,iid:str):
         ''' four main attributes are defined in this function'''
@@ -17,14 +24,16 @@ class User:
 
     def set_Username(self,Username:str):
         ''' only valid names are allowed to register'''
+        result, user_data = Nosql_database.Check(Username)
 
-        if len(Username) == 0:
+        if len(Username) == 0 or Username.isdigit():
             print('username must have at least 1 letter\n')
             raise ValueError
 
+
         self.names.append(Username)
-        if self.names.count(Username) == 2:
-            print('the entered name is duplicate or has been selected by another user')
+        if self.names.count(Username) == 2 or result:
+            print('the entered name is duplicate or has been selected by another user.\n')
             self.names.remove((Username))
             raise ValueError
         self.Username = Username
@@ -66,8 +75,9 @@ class User:
     def get_password(self):
         return self.__password
 
-    def new_password(self):
+    def new_password(self,user_data,Username):
         ''' remove old passwords and set new passwords'''
+        old_Username = Username
 
         old_password = getpass.getpass('Enter the current password:')
         new_password_1 = getpass.getpass('Enter new password:')
@@ -76,21 +86,28 @@ class User:
             print('incorrect password')
 
         elif old_password == new_password_1:
-            print('the entered password is duplicate')
+            print('the entered password is duplicate.\n')
 
         elif new_password_1 != new_password_2:
-            print('the entered passwords do not match')
+            print('the entered passwords do not match.\n')
         else:
             new_password = new_password_1
             self.__password = new_password
             hash_password = self.hash_password(new_password)
-            self.change_password(new_password,self.users_info,self.Username,hash_password)
+
+            user_data[Username][1] = new_password
+            user_data[Username][3] = hash_password
+            print('your password changed.\n')
+
+            Nosql_database.Edit_data(user_data, old_Username, Username)
+            Pgadmin.Edit(new_password,Username,'password')
 
 
 
 
 class User_Application(User):
     ''' using the condetions set in the parent class , it creats instance and changes it if needed'''
+    user_data ={}
 
     def __init__(self,Username:str,phone_number:str ,password:str,iid:str):
         ''' it inherits the four main attributes from the parent class'''
@@ -100,9 +117,10 @@ class User_Application(User):
     def sign_up(cls):
         ''' registers new users'''
 
-        Username = input('Enter your username:')
-        phone_number = input('Enter your phone number:')
-        password = getpass.getpass('Enter your password:')
+        Username = input('Enter your username:\n')
+        phone_number = input('Enter your phone number:\n')
+        password = getpass.getpass('Enter your password:\n')
+
         iid = uuid.uuid5(uuid.NAMESPACE_DNS,Username)
 
         instance = cls(Username,phone_number,password,iid)
@@ -113,47 +131,82 @@ class User_Application(User):
 
         hash_password = cls.hash_password(password)
 
+        iid , hash_password = str(iid) , str(hash_password)
+
         cls.users_info[Username] = [phone_number,password,iid,hash_password]
+
+        return Username
 
 
     @classmethod
     def Login(cls):
         ''' if the correct information is enterd, the user will be allowed to enter the account'''
 
-        Username = input('Enter your username to Login:')
-        if Username not in cls.users_info:
-            print('No user found with this name')
-        else:
-            password = getpass.getpass('Enter your password:')
-            if cls.hash_password(password) == cls.users_info[Username][3]:
-                print('Login was done successfully')
 
-                phone_number , iid = cls.users_info[Username][0] , cls.users_info[Username][2]
+        Username = input('Enter your username to Login:\n')
+
+        result ,cls.user_data = Nosql_database.Check(Username)
+
+        if Username not in cls.users_info and not result:
+
+            print('No user found with this name.\n')
+
+        else:
+            password = getpass.getpass('Enter your password:\n')
+            if cls.hash_password(password) == cls.user_data[Username][3]:
+
+                print('\nLogin was done successfully\n')
+
+                phone_number , iid = cls.user_data[Username][0] , cls.user_data[Username][2]
 
                 instance = cls(Username,phone_number,password,iid)
 
                 instance.User_account()
 
             else:
-                print('incorrect password')
-
+                print('incorrect password.\n')
 
     def User_account(self):
         ''' it allows the user to choose between viewing information,editing and changing the password'''
 
+        from Date import Date
+        from bank_acounts import Bank_accounts
+
+        Wallet.Auto_Change_subscription(self.Username,self.user_data)
+
         while True:
-            b = input('press 1 to see your informations or 2 to Edit or 3 to change password or 4 to exit:')
+            b = input('press 1 to see your informations\n'
+                      '2 to Edit your username\n'
+                      '3 to change phone number\n'
+                      '4 to edit birthday\n'
+                      '5 to change password\n'
+                      '6 to manage your bank accounts\n'
+                      '7 to manage your wallet and subscription\n'
+                      '0 to exit\n')
 
             if b == '1':
                 self.__str__()
 
             elif b == '2':
-                self.edit_profile()
-
+                self.edit_Username(self.user_data,self.Username)
             elif b == '3':
-                self.new_password()
+                self.edit_Phone_number(self.user_data,self.Username,self.phone_number)
 
             elif b == '4':
+                Date.Change_Birthday(self.user_data,self.Username,self.user_data[self.Username][4])
+
+            elif b == '5':
+                self.new_password(self.user_data,self.Username)
+
+            elif b == '6':
+
+                Bank_accounts.Manage_accounts(self.Username,self.user_data)
+
+            elif b == '7':
+
+                Manage.Manage_wallet(self.Username,self.user_data)
+
+            elif b == '0':
                 print('you have logged out of your account\n')
                 break
 
@@ -162,54 +215,59 @@ class User_Application(User):
 
 
     def __str__(self):
-        from Date import Date
         ''' it allows the user to viewing information'''
+
         print(
             f'username is: {self.Username} \nphone_number is: {self.phone_number}'
-            f' \nuser id is: {self.iid} \nuser birthday is: {Date.users_info[self.Username][4]}'
-            f'\nThe date of Registration is: {Date.users_info[self.Username][5]}')
+            f' \nuser id is: {self.iid} \nuser birthday is: {self.user_data[self.Username][4]}'
+            f'\nThe date of Registration is: {self.user_data[self.Username][5]}\n')
 
 
-    def edit_profile(self):
+
+
+    def edit_Username(self,user_data,Username):
         ''' it allows the user to editing profile'''
+        #print(user_data)
 
-        from Date import Date
-
-        old_Username = self.Username
-        old_phone_number = self.phone_number
-
-        Username = input('Enter your new username:')
-        phone_number = input('Enter your new phone_number:')
         try:
+            old_Username = Username
+            Username = input('Enter your new username:')
+
             if Username != old_Username:
                 self.set_Username(Username)
-                self.names.remove(old_Username)
-                print('your username has changed')
+                print('your username has changed\n')
 
-            self.set_phone_number(phone_number,Username)
-            if old_phone_number != phone_number:
-                print('your phone number has changed')
+                user_data[Username] = user_data.pop(old_Username)
+                Nosql_database.Edit_data(user_data,old_Username,Username)
+                Pgadmin.Edit(Username,old_Username,'username')
 
-            self.users_info[Username] = self.users_info.pop(old_Username)
-            self.users_info[Username][0] = phone_number
+
+            if User.names.count(old_Username) == 1:
+                User.names.remove((old_Username))
+
 
         except ValueError:
-            pass
-
-        answer = input('do you want change your birthday(yes/no)?\n ')
-        if answer == 'yes':
-            birthday = Date.users_info[self.Username][4]
-            Date.change_Birthday(self.Username,birthday)
-        else:
-            ValueError
+            print('incorrect input\n')
 
 
-    @staticmethod
-    def change_password(new_password:str,users_info:dict,Username:str,hash_password):
-        ''' set the new password as the user's password and the user
-        is allowed to enter the account by entring this password '''
+    def edit_Phone_number(self,user_data,Username,phone_number):
 
-        users_info[Username][1] = new_password
-        users_info[Username][3] = hash_password
-        print('your password changed\n')
+        try:
+            old_Username = Username
+            old_phone_number = phone_number
+            phone_number = input('Enter your new phone_number:')
+
+            self.set_phone_number(phone_number, Username)
+            if old_phone_number != phone_number:
+                print('your phone number has changed')
+                user_data[Username][0] = phone_number
+
+            Nosql_database.Edit_data(user_data, old_Username, Username)
+            Pgadmin.Edit(phone_number,Username,'phone_number')
+
+        except ValueError:
+            print('incorrect input\n')
+
+
+
 
