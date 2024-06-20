@@ -177,10 +177,9 @@ class User_Application(User):
             b = input('press 1 to see your informations\n'
                       '2 to Edit your username\n'
                       '3 to change phone number\n'
-                      '4 to edit birthday\n'
-                      '5 to change password\n'
-                      '6 to manage your bank accounts\n'
-                      '7 to manage your wallet and subscription\n'
+                      '4 to change password\n'
+                      '5 to manage your bank accounts\n'
+                      '6 to manage your wallet and subscription\n'
                       '0 to exit\n')
 
             if b == '1':
@@ -192,16 +191,13 @@ class User_Application(User):
                 self.edit_Phone_number(self.user_data,self.Username,self.phone_number)
 
             elif b == '4':
-                Date.Change_Birthday(self.user_data,self.Username,self.user_data[self.Username][4])
-
-            elif b == '5':
                 self.new_password(self.user_data,self.Username)
 
-            elif b == '6':
+            elif b == '5':
 
                 Bank_accounts.Manage_accounts(self.Username,self.user_data)
 
-            elif b == '7':
+            elif b == '6':
 
                 Manage.Manage_wallet(self.Username,self.user_data)
 

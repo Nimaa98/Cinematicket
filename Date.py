@@ -69,25 +69,7 @@ class Date(Check_birthday):
         User.users_info.popitem()
         User.names.pop()
 
-    @classmethod
-    def Change_Birthday(cls,user_data,Username,birthday):
 
-        old_Username = Username
-        old_birthday = birthday
-        new_birthday = input('Enter your new birthday: ')
-
-        if (old_birthday != new_birthday and
-                re.match(r'(19[0-9][0-9]|20[0-1][0-8])-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])', new_birthday)):
-
-            user_data[Username][4] = new_birthday
-            print('your birthday changed\n')
-
-            Nosql_database.Edit_data(user_data, old_Username, Username)
-
-
-
-        else:
-            print('Try again\n')
 
 
 
