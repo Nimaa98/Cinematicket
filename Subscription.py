@@ -2,7 +2,6 @@
 from noSQL_Database import Nosql_database
 from bank_acounts import Bank_accounts , Change_Balance
 from datetime import datetime , timedelta, date
-from connect_postgre import Pgadmin
 
 
 class Wallet:
@@ -47,7 +46,6 @@ class Wallet:
 
             user_data[Username][7][wallet_id][0] = 'Bronze'
             Nosql_database.Add(user_data)
-            Pgadmin.Edit_wallet('Bronze', wallet_id, 'subscription')
 
 
 
@@ -136,7 +134,6 @@ class Manage(Wallet):
 
                 user_data[Username][7][cls.wallet_id][2] += amount
                 Nosql_database.Add(user_data)
-                Pgadmin.Edit_wallet(wallet_balance,cls.wallet_id,'balance')
 
 
             except ValueError:
@@ -192,8 +189,6 @@ class Manage(Wallet):
                 user_data[Username][7][cls.wallet_id][0] = next_sub
 
                 Nosql_database.Add(user_data)
-                Pgadmin.Edit_wallet(next_sub, cls.wallet_id, 'subscription')
-                Pgadmin.Edit_wallet(balance,cls.wallet_id, 'balance')
                 print(f'\n{next_sub} Subscriptions activated for you.\n')
 
                 purchase_date = str(date.today())
@@ -214,7 +209,6 @@ class Manage(Wallet):
                 user_data[Username][7][cls.wallet_id][0] = next_sub
 
                 Nosql_database.Add(user_data)
-                Pgadmin.Edit_wallet(next_sub, cls.wallet_id, 'subscription')
                 print(f'\n{next_sub} Subscriptions activated for you.\n')
 
                 purchase_date = str(date.today())

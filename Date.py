@@ -2,7 +2,6 @@ import re
 from noSQL_Database import Nosql_database
 from User import User,User_Application
 from datetime import date
-from connect_postgre import Pgadmin
 from Subscription import Wallet
 
 
@@ -41,7 +40,7 @@ class Check_birthday:
         user_data = Wallet.wallet(Username,User.users_info)
 
         Nosql_database.Add(user_data)
-        Pgadmin.Insert(user_data, Username)
+
 
         print('Registration was successfull', '\n')
 
@@ -84,7 +83,7 @@ class Date(Check_birthday):
             print('your birthday changed\n')
 
             Nosql_database.Edit_data(user_data, old_Username, Username)
-            Pgadmin.Edit(new_birthday,Username,'birthday')
+
 
 
         else:

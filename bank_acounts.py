@@ -3,7 +3,7 @@
 from abc import ABC
 import re
 from noSQL_Database import Nosql_database
-from connect_postgre import Pgadmin
+
 
 class Bank(ABC):
     user_accounts = {}
@@ -98,7 +98,6 @@ class Bank_accounts(Bank):
 
         user_data[Username][6][cart_number][3] = balance
         Nosql_database.Add(user_data)
-        Pgadmin.Edit_account_balance(balance,cart_number,'balance')
 
         print(f'The transaction was completed successfully.\n')
 
@@ -126,7 +125,6 @@ class Bank_accounts(Bank):
             print('\nThe transaction was completed successfully.\n')
             user_data[Username][6][cart_number][3] = balance
             Nosql_database.Add(user_data)
-            Pgadmin.Edit_account_balance(balance,cart_number,'balance')
             return amount
         else:
             print('\ncvv2 or password is incorrect.\ntry again later.\n')
@@ -193,8 +191,6 @@ class Bank_accounts(Bank):
 
             Nosql_database.Add(user_data)
 
-        Pgadmin.Edit_account_balance(balance, cart_number, 'balance')
-        Pgadmin.Edit_account_balance(other_balance, cart_dest_number, 'balance')
         print('successfully transferd.\n')
 
 
@@ -257,7 +253,6 @@ class Bank_accounts(Bank):
         user_data[Username][6][cart_number] = [name,cvv2,password,balance]
 
         Nosql_database.Add(user_data)
-        Pgadmin.Insert_bank_accounts(user_data,Username,cart_number,name,cvv2,password,balance)
 
 
         print(f'\nyour cart number added.\n')
