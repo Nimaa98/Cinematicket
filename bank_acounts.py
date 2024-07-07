@@ -321,7 +321,7 @@ class Change_Balance(Bank_accounts):
 
             return cart_number , cart_info
 
-        print('incorrect input.\n')
+        print('No card was selected.\n')
 
         return None , None
 
