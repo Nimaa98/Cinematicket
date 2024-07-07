@@ -1,0 +1,478 @@
+{
+    "Movie name": [
+        "Movie Farsi Name",
+        [
+            "Days numbers of week"
+        ],
+        {
+            "Morning_ShowTime": [
+                "Capacity",
+                "Start Time",
+                {
+                    "Day ": "Capacity"
+                }
+            ],
+            "Afternoon_ShowTime": [
+                "Capacity",
+                "Start Time",
+                {
+                    "Day ": "Capacity"
+                }
+            ],
+            "Night_ShowTime": [
+                "Capacity",
+                "Start Time",
+                {
+                    "Day ": "Capacity"
+                }
+            ]
+        },
+        "genre",
+        "Price",
+        "Permissible age"
+    ],
+    "Texas 3": [
+        "تگزاس ۳",
+        [
+            0,
+            2,
+            4,
+            6
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Monday": 0,
+                    "Wednesday": 100,
+                    "Friday": 100,
+                    "Sunday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Wednesday": 100,
+                    "Friday": 100,
+                    "Sunday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Wednesday": 99,
+                    "Friday": 100,
+                    "Sunday": 100
+                }
+            ]
+        },
+        "کمدی",
+        80000,
+        0
+    ],
+    "Khejalat Nakesh 2": [
+        "خجالت نکش ۲",
+        [
+            1,
+            2,
+            5
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Tuesday": 100,
+                    "Wednesday": 100,
+                    "Saturday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Tuesday": 100,
+                    "Wednesday": 100,
+                    "Saturday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Tuesday": 100,
+                    "Wednesday": 100,
+                    "Saturday": 100
+                }
+            ]
+        },
+        "کمدی",
+        80000,
+        0
+    ],
+    "Aparatchi": [
+        "آپاراتچی",
+        [
+            2,
+            4
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Wednesday": 100,
+                    "Friday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Wednesday": 100,
+                    "Friday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Wednesday": 100,
+                    "Friday": 100
+                }
+            ]
+        },
+        "خانوادگي | درام",
+        80000,
+        0
+    ],
+    "Gholhak": [
+        "قلهک",
+        [
+            1,
+            3
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Tuesday": 100,
+                    "Thursday": 99
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Tuesday": 100,
+                    "Thursday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Tuesday": 100,
+                    "Thursday": 98
+                }
+            ]
+        },
+        "کمدی",
+        80000,
+        0
+    ],
+    "Maste Eshgh": [
+        "مست عشق",
+        [
+            3,
+            5,
+            6
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Thursday": 100,
+                    "Saturday": 100,
+                    "Sunday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Thursday": 100,
+                    "Saturday": 100,
+                    "Sunday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Thursday": 100,
+                    "Saturday": 100,
+                    "Sunday": 100
+                }
+            ]
+        },
+        "تاريخي | درام | عاشقانه",
+        80000,
+        0
+    ],
+    "Bi Badan": [
+        "بی بدن",
+        [
+            0,
+            1,
+            5
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Tuesday": 100,
+                    "Saturday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Tuesday": 100,
+                    "Saturday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Tuesday": 100,
+                    "Saturday": 100
+                }
+            ]
+        },
+        "جنايي",
+        80000,
+        15
+    ],
+    "Atr Alood": [
+        "عطرآلود",
+        [
+            3,
+            5
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Thursday": 100,
+                    "Saturday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Thursday": 100,
+                    "Saturday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Thursday": 100,
+                    "Saturday": 100
+                }
+            ]
+        },
+        "اجتماعی | درام",
+        80000,
+        0
+    ],
+    "Abi Roshan": [
+        "آبی روشن",
+        [
+            0,
+            2
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Wednesday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Wednesday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Monday": 100,
+                    "Wednesday": 100
+                }
+            ]
+        },
+        "اجتماعی | درام",
+        80000,
+        0
+    ],
+    "Temsahe khoni": [
+        "تمساح خونی",
+        [
+            2,
+            4,
+            6
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Wednesday": 100,
+                    "Friday": 100,
+                    "Sunday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Wednesday": 100,
+                    "Friday": 100,
+                    "Sunday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Wednesday": 100,
+                    "Friday": 100,
+                    "Sunday": 100
+                }
+            ]
+        },
+        "اکشن | کمدی",
+        80000,
+        0
+    ],
+    "The Nun II": [
+        "راهبه ۲",
+        [
+            4,
+            5
+        ],
+        {
+            "Morning_ShowTime": [
+                [
+                    9,
+                    0
+                ],
+                {
+                    "Friday": 98,
+                    "Saturday": 100
+                }
+            ],
+            "Afternoon_ShowTime": [
+                [
+                    13,
+                    0
+                ],
+                {
+                    "Friday": 100,
+                    "Saturday": 100
+                }
+            ],
+            "Night_ShowTime": [
+                [
+                    20,
+                    0
+                ],
+                {
+                    "Friday": 100,
+                    "Saturday": 100
+                }
+            ]
+        },
+        "ترسناک | رازآلود",
+        100000,
+        18
+    ]
+}

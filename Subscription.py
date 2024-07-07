@@ -44,8 +44,20 @@ class Wallet:
 
         if today > expiration_date:
 
+            print('\nYour subscription has expired.\n')
+
+            if user_data[Username][7][wallet_id][0] == 'Golden':
+                drink_price = 50000
+                balance = user_data[Username][7][wallet_id][2]
+                balance += drink_price
+
+                user_data[Username][7][wallet_id][2] = balance
+                print('\nYou have used the golden subscription in the last month.'
+                      '\nAs a bonus, the cost of an energy drink was added to your wallet.\n')
+
             user_data[Username][7][wallet_id][0] = 'Bronze'
             Nosql_database.Add(user_data)
+
 
 
 

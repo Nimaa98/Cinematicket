@@ -88,8 +88,20 @@ class Nosql_database:
 
             return user_data
 
+    @staticmethod
+    def Movies_info():
+
+        with open('Movies.json', 'r', encoding='utf-8') as f:
+            Movies_dict = json.load(f)
 
 
+            return Movies_dict
+
+    @staticmethod
+    def Update_Movies(Movies_dict):
+
+        with open('Movies.json', '+w', encoding='utf-8') as f:
+            json.dump(Movies_dict, f ,ensure_ascii=False, indent=4)
 
 
 

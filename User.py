@@ -2,6 +2,7 @@
 import re,getpass,hashlib,uuid
 from noSQL_Database import Nosql_database
 from Subscription import Wallet , Manage
+from Reservation import Purchas
 
 
 
@@ -180,6 +181,7 @@ class User_Application(User):
                       '4 to change password\n'
                       '5 to manage your bank accounts\n'
                       '6 to manage your wallet and subscription\n'
+                      '7 to see Movies and Reserve seat\n'
                       '0 to exit\n')
 
             if b == '1':
@@ -200,6 +202,10 @@ class User_Application(User):
             elif b == '6':
 
                 Manage.Manage_wallet(self.Username,self.user_data)
+
+            elif b == '7':
+
+                Purchas.Choose(self.Username,self.user_data)
 
             elif b == '0':
                 print('you have logged out of your account\n')
