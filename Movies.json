@@ -58,7 +58,7 @@
                     0
                 ],
                 {
-                    "Monday": 100,
+                    "Monday": 0,
                     "Wednesday": 100,
                     "Friday": 100,
                     "Sunday": 100
@@ -322,7 +322,7 @@
             ],
             "Afternoon_ShowTime": [
                 [
-                    13,
+                    11,
                     0
                 ],
                 {
@@ -332,7 +332,7 @@
             ],
             "Night_ShowTime": [
                 [
-                    20,
+                    12,
                     0
                 ],
                 {

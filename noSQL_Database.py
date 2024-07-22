@@ -104,6 +104,34 @@ class Nosql_database:
             json.dump(Movies_dict, f ,ensure_ascii=False, indent=4)
 
 
+    @classmethod
+    def Add_Admin(cls,Admin_info):
+
+        with open('Admin_info.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+        cls.data.update(Admin_info)
+
+        with open('Admin_info.json','+w',encoding='utf-8') as f:
+            json.dump(cls.data, f ,ensure_ascii=False, indent=4)
+
+
+    @classmethod
+    def Check_Admin_name(cls,Username):
+
+        with open('Admin_info.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+            if Username in cls.data:
+
+                password = cls.data[Username]
+
+                return True , password
+
+            return False ,None
+
+
+
 
 
 
