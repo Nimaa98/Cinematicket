@@ -3,8 +3,8 @@ import re,getpass,hashlib,uuid
 from noSQL_Database import Nosql_database
 from Subscription import Wallet , Manage
 from Reservation import Purchas
-
-
+from Separator import User_role
+from Admin import Admin_application
 
 
 class User:
@@ -118,6 +118,12 @@ class User_Application(User):
         ''' registers new users'''
 
         Username = input('Enter your username:\n')
+        
+        flag = User_role.Check_user_role(Username)
+        
+        if flag:
+            raise Exception
+
         phone_number = input('Enter your phone number:\n')
         password = getpass.getpass('Enter your password:\n')
 
@@ -147,7 +153,15 @@ class User_Application(User):
 
         result ,cls.user_data = Nosql_database.Check(Username)
 
-        if Username not in cls.users_info and not result:
+        flag , password = Nosql_database.Check_Admin_name(Username)
+
+
+        if flag:
+
+            Admin_application.Login(password)
+
+
+        elif Username not in cls.users_info and not result:
 
             print('No user found with this name.\n')
 

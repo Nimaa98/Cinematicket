@@ -65,10 +65,6 @@ class Movies():
 
 
 
-
-
-
-
 class Purchas(Movies):
 
     def __init__(self,movie,day,show_time):
@@ -96,10 +92,12 @@ class Purchas(Movies):
         cls.user_data = user_data
         cls.wallet_id = user_data[Username][2]
 
+        cls.Movies_dict = Nosql_database.Get_Movies()
+
+
         while True:
             b = input('\npress 1 to see Cinema Program\n'
                       '2 to buy Cinema Ticket\n'
-                      '3 to see your purchased movies\n'
                       '0 to exit\n')
 
             if b == '1':
@@ -108,15 +106,27 @@ class Purchas(Movies):
             elif b == '2':
                 Purchas.Select()
 
-            elif b == '3':
-                Purchas.Purchased_Movies()
-
             elif b == '0':
                 break
 
 
     @classmethod
     def Select(cls):
+
+        Movies = Nosql_database.Get_Movies()
+
+        Movies = list(Movies.keys())
+
+        Movies.remove('Movie name')
+
+        print(f'\nThese are Cinema Ticket Movies:\n')
+
+        for i in range(0, len(Movies), 3):
+            chunk = Movies[i:i + 3]
+
+            print(*chunk, sep='          ', end='\n')
+
+
         movie = input('\nWhich movie are you going to watch?\n(Use English letters)\n ')
 
         day = input('\non which day do you plan to watch the movie??\n(Example: Friday)\n')
@@ -257,112 +267,141 @@ class Purchas(Movies):
 
 
 
-    @staticmethod
-    def Purchased_Movies():
-        pass
-
-
-
-
-
 
 class View_seat(Movies):
 
     key = []
     new_Movie_dict ={}
-    flag = True
+
 
     morning_start, afternoon_start, night_start = None, None, None
 
     @classmethod
-    def Cinema_program(cls,Movies_dict):
+    def Calc_date_range(cls):
         today = datetime.now()
 
         further_date = today + timedelta(days=6)
 
-        now = cls.now
-
         date_range = [today + timedelta(days=i) for i in range((further_date - today).days + 1)]
 
+        return  date_range
+
+    @classmethod
+    def Cinema_program(cls,Movies_dict):
+
+        flag = True
+
+        
         print('\nMovies list:',60 * '-',sep='\n')
+
+        date_range = View_seat.Calc_date_range()
 
 
         for i in date_range:
+
+            
             print(i,i.strftime('%A'),i.weekday(),sep='   ')
             print('Cinema', i.strftime('%A'), 'Program:\n')
 
             for movie in Movies_dict:
 
-                 if cls.flag and i.weekday() in Movies_dict[movie][1] :
+                 if flag and i.weekday() in Movies_dict[movie][1] :
                     cls.key.append(movie)
-                    View_seat.Show_Time(cls.key,Movies_dict,now)
+                    View_seat.Show_Time(cls.key,Movies_dict,cls.now)
+
 
                  elif i.weekday() in Movies_dict[movie][1]:
 
+                     cls.key = []
                      day = i.strftime('%A')
-                     print(f'Movie name: {movie}\n'
+
+                     print(f'\nMovie name: {movie}\n'
+                           f'Movie farsi name: {Movies_dict[movie][0]}\n'
                            f'Movie genre: {Movies_dict[movie][3]}\n'
                            f'Ticket Price: {Movies_dict[movie][4]}\n'
-                           f'Show Times:'
-                           f'morning: {cls.morning_start} ==> Remain Capacity: {Movies_dict[movie][2]["Morning_ShowTime"][1][day]}\n'
-                           f'afternoon: {cls.afternoon_start} ==> Remain Capacity: {Movies_dict[movie][2]["Afternoon_ShowTime"][1][day]}\n'
-                           f'night: {cls.night_start} ==> Remain Capacity: {Movies_dict[movie][2]["Night_ShowTime"][1][day]} \n\n')
+                           f'Show Times:')
+
+
+                     show_times = Movies_dict[movie][2]
+                     for j in show_times:
+
+                        situation = Movies_dict[movie][2][j][2]
+                        start_time = time(*Movies_dict[movie][2][j][0])
+                        if situation == 'Active':
+
+                            print(f'Start at: {start_time} ==> Remain Capacity: {Movies_dict[movie][2][j][1][day]}')
+                            print(20*'-')
 
             print(70 * '*')
 
-            cls.flag = False
+            flag = False
+
 
     @classmethod
     def Show_Time(cls,key,Movies_dict,now):
         day = now.strftime('%A')
         now = now.time()
-        start_times = []
+        cls.flag = True
+
 
         for movie in Movies_dict:
             if movie in key:
                 cls.new_Movie_dict = {movie:Movies_dict[movie]}
-                show_time_dict = cls.new_Movie_dict[movie][2]
 
 
-        for Time in show_time_dict:
+        for movie in cls.new_Movie_dict:
 
-            hour = show_time_dict[Time][0][0]
-            minute = show_time_dict[Time][0][1]
-            start_times.append(time(hour, minute))
+            night_start = time(*Movies_dict[movie][2]["Night_ShowTime"][0])
+            start_times = []
 
-
-        cls.morning_start = start_times[0]
-        cls.afternoon_start = start_times[1]
-        cls.night_start = start_times[2]
-
-
-        for movie in  cls.new_Movie_dict:
-
-            print(f'Movie name: {movie}\n'
+            
+            print(f'\nMovie name: {movie}\n'
+                  f'Movie farsi name: {cls.new_Movie_dict[movie][0]}\n'
                   f'Movie genre: {cls.new_Movie_dict[movie][3]}\n'
                   f'Ticket Price: {cls.new_Movie_dict[movie][4]}\n'
-                  f'Show Times:')
+                  f'Show Times:\n')
 
-            if now < cls.morning_start:
-                print(f'morning: {cls.morning_start} ==> Remain Capacity: {cls.new_Movie_dict[movie][2]["Morning_ShowTime"][1][day]}\n'
-                    f'afternoon: {cls.afternoon_start} ==> Remain Capacity: {cls.new_Movie_dict[movie][2]["Afternoon_ShowTime"][1][day]}\n'
-                    f'night: {cls.night_start} ==> Remain Capacity: {cls.new_Movie_dict[movie][2]["Night_ShowTime"][1][day]} \n\n')
+            show_times = cls.new_Movie_dict[movie][2]
+
+            n = 0
+            for i in show_times:
+
+                situation = cls.new_Movie_dict[movie][2][i][2]
+
+                start_time = time(*Movies_dict[movie][2][i][0])
+                start_times.append(start_time)
+
+                if situation == 'Active' and now < start_time:
+
+                    print(f'Start at: {start_time} ==> Remain Capacity: {cls.new_Movie_dict[movie][2][i][1][day]}')
+                    print(20*'-')
 
 
-            elif cls.morning_start < now < cls.afternoon_start:
 
-                print(f'afternoon: {cls.afternoon_start} ==> Remain Capacity: {cls.new_Movie_dict[movie][2]["Afternoon_ShowTime"][1][day]}\n'
-                      f'night: {cls.night_start} ==> Remain Capacity: {cls.new_Movie_dict[movie][2]["Night_ShowTime"][1][day]} \n\n')
+                n += 1
 
-            elif cls.afternoon_start < now < cls.night_start:
+            View_seat.Auto_Change_capacity(Movies_dict,movie,start_times,day,now)
 
-                print(f'night: {cls.night_start} ==> Remain Capacity: {cls.new_Movie_dict[movie][2]["Night_ShowTime"][1][day]} \n\n')
-            else:
-                print(f'there is no show time at now\n\n')
 
-                Movies_dict[movie][2]["Morning_ShowTime"][1][day] = 100
-                Movies_dict[movie][2]["Afternoon_ShowTime"][1][day] = 100
-                Movies_dict[movie][2]["Night_ShowTime"][1][day] = 100
 
-                Nosql_database.Update_Movies(Movies_dict)
+
+
+
+    @classmethod
+    def Auto_Change_capacity(cls,Movies_dict,movie,start_times,day,now):
+
+
+        if  max(start_times) < now :
+
+            print(f'there is no show time at now\n\n')
+
+            Movies_dict[movie][2]["Morning_ShowTime"][1][day] = Movies_dict[movie][6]
+            Movies_dict[movie][2]["Afternoon_ShowTime"][1][day] = Movies_dict[movie][6]
+            Movies_dict[movie][2]["Night_ShowTime"][1][day] = Movies_dict[movie][6]
+
+            Nosql_database.Update_Movies(Movies_dict)
+
+
+
+
 

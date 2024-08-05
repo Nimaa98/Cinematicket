@@ -97,6 +97,7 @@ class Nosql_database:
 
             return Movies_dict
 
+
     @staticmethod
     def Update_Movies(Movies_dict):
 
@@ -104,14 +105,68 @@ class Nosql_database:
             json.dump(Movies_dict, f ,ensure_ascii=False, indent=4)
 
 
+    @classmethod
+    def Add_Admin(cls,Admin_info):
+
+        with open('Admin_info.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+        cls.data.update(Admin_info)
+
+        with open('Admin_info.json','+w',encoding='utf-8') as f:
+            json.dump(cls.data, f ,ensure_ascii=False, indent=4)
+
+
+    @classmethod
+    def Check_Admin_name(cls,Username):
+
+        with open('Admin_info.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+            if Username in cls.data:
+
+                password = cls.data[Username]
+
+                return True , password
+
+            return False ,None
+
+    @classmethod
+    def Add_Movie(cls,Movie):
+
+
+        with open('Movies.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+        cls.data.update(Movie)
+
+        with open('Movies.json','+w',encoding='utf-8') as f:
+            json.dump(cls.data, f ,ensure_ascii=False, indent=4)
 
 
 
+    @classmethod
+    def Delet_Movie(cls,Movie):
+
+        with open('Movies.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+        cls.data.pop(Movie)
+
+
+        with open('Movies.json','+w',encoding='utf-8') as f:
+            json.dump(cls.data, f ,ensure_ascii=False, indent=4)
 
 
 
+    @classmethod
+    def Get_Movies(cls):
+
+        with open('Movies.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
 
 
+        return cls.data
 
 
 
