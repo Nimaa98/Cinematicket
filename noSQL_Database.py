@@ -97,6 +97,7 @@ class Nosql_database:
 
             return Movies_dict
 
+
     @staticmethod
     def Update_Movies(Movies_dict):
 
@@ -130,16 +131,42 @@ class Nosql_database:
 
             return False ,None
 
+    @classmethod
+    def Add_Movie(cls,Movie):
+
+
+        with open('Movies.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+        cls.data.update(Movie)
+
+        with open('Movies.json','+w',encoding='utf-8') as f:
+            json.dump(cls.data, f ,ensure_ascii=False, indent=4)
 
 
 
+    @classmethod
+    def Delet_Movie(cls,Movie):
+
+        with open('Movies.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
+
+        cls.data.pop(Movie)
+
+
+        with open('Movies.json','+w',encoding='utf-8') as f:
+            json.dump(cls.data, f ,ensure_ascii=False, indent=4)
 
 
 
+    @classmethod
+    def Get_Movies(cls):
+
+        with open('Movies.json', 'r',encoding='utf-8') as file:
+            cls.data = json.load(file)
 
 
-
-
+        return cls.data
 
 
 

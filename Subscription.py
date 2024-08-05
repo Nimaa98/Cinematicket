@@ -41,10 +41,10 @@ class Wallet:
         today = datetime.now()
         today = today.strftime('%Y-%m-%d')
 
-
         if today > expiration_date:
 
-            print('\nYour subscription has expired.\n')
+            if user_data[Username][7][wallet_id][0] != 'Bronze':
+                print('\nYour subscription has expired.\n')
 
             if user_data[Username][7][wallet_id][0] == 'Golden':
                 drink_price = 50000
@@ -56,6 +56,9 @@ class Wallet:
                       '\nAs a bonus, the cost of an energy drink was added to your wallet.\n')
 
             user_data[Username][7][wallet_id][0] = 'Bronze'
+
+            user_data[Username][7][wallet_id][1] =today
+
             Nosql_database.Add(user_data)
 
 

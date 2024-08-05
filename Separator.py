@@ -25,10 +25,7 @@ class User_role(Enum):
 
 
 
-#Username = 'Admin'
 
-
-#User_role.Check_user_role(Username)
 
 
 
