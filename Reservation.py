@@ -1,6 +1,6 @@
 from datetime import datetime , timedelta , time
 from noSQL_Database import Nosql_database
-from bank_acounts import Bank_accounts , Change_Balance
+from bank_acounts import Bank_accounts , Change_Balance , Clear_screan
 import math
 
 
@@ -25,6 +25,8 @@ class Movies():
 
     def Movie_setter(self,movie):
 
+        Clear_screan()
+
         if movie not in self.__class__.Movies_dict:
 
             print(f'\n{movie} not found.\n')
@@ -34,6 +36,8 @@ class Movies():
 
 
     def show_time_setter(self,show_time,day):
+
+        Clear_screan()
 
         today = self.__class__.now.strftime('%A')
 
@@ -51,6 +55,8 @@ class Movies():
 
 
     def day_setter(self,movie,day):
+
+        Clear_screan()
 
         celender = {"Monday":0,"Tuesday":1,"Wednesday":2,"Thursday":3,"Friday":4,"Saturday":5,"Sunday":6}
         day_number = celender[day]
@@ -94,6 +100,7 @@ class Purchas(Movies):
 
         cls.Movies_dict = Nosql_database.Get_Movies()
 
+        Clear_screan()
 
         while True:
             b = input('\npress 1 to see Cinema Program\n'
@@ -109,9 +116,15 @@ class Purchas(Movies):
             elif b == '0':
                 break
 
+            else:
+                print('\nIncorrect Input.\n')
+                Clear_screan()
+
 
     @classmethod
     def Select(cls):
+
+        Clear_screan()
 
         Movies = Nosql_database.Get_Movies()
 
@@ -163,6 +176,8 @@ class Purchas(Movies):
     @classmethod
     def Limit(cls,movie,show_time,day):
 
+        Clear_screan()
+
         birthday, signup_date = Purchas.Date_format()
 
         if cls.Movies_dict[movie][2][show_time][1][day] == 0:
@@ -181,6 +196,8 @@ class Purchas(Movies):
 
     @classmethod
     def Apply_discount(cls,price):
+
+        Clear_screan()
 
         sub_discount = {'Bronze':0,'Silver':.2,'Golden':.5}
 
@@ -213,6 +230,9 @@ class Purchas(Movies):
 
     @classmethod
     def Buy(cls,movie,day,show_time,capacity,price):
+
+        Clear_screan()
+
         amount = price
         wallet_id = cls.user_data[cls.Username][2]
 
@@ -270,6 +290,7 @@ class Purchas(Movies):
 
 class View_seat(Movies):
 
+
     key = []
     new_Movie_dict ={}
 
@@ -286,8 +307,11 @@ class View_seat(Movies):
 
         return  date_range
 
+
     @classmethod
     def Cinema_program(cls,Movies_dict):
+
+        Clear_screan()
 
         flag = True
 
@@ -339,6 +363,9 @@ class View_seat(Movies):
 
     @classmethod
     def Show_Time(cls,key,Movies_dict,now):
+
+        Clear_screan()
+
         day = now.strftime('%A')
         now = now.time()
         cls.flag = True
@@ -390,6 +417,7 @@ class View_seat(Movies):
     @classmethod
     def Auto_Change_capacity(cls,Movies_dict,movie,start_times,day,now):
 
+        Clear_screan()
 
         if  max(start_times) < now :
 

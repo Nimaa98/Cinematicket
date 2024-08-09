@@ -1,6 +1,6 @@
 import re
 from noSQL_Database import Nosql_database
-from User import User,User_Application
+from User import User,User_Application , Clear_screan
 from datetime import date
 from Subscription import Wallet
 
@@ -11,6 +11,8 @@ class Check_birthday:
     wallet = {}
 
     def set_birthday(self,birth_day,Username):
+
+        Clear_screan()
 
         if re.match(r'(19[0-9][0-9]|20[0-1][0-8])-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])',birth_day):
             self.birth_day = birth_day
@@ -30,6 +32,8 @@ class Check_birthday:
 
     @classmethod
     def Make_account(cls,Username,birth_day):
+
+        Clear_screan()
 
         today = str(date.today())
 
@@ -54,6 +58,8 @@ class Date(Check_birthday):
 
     @classmethod
     def Birthday(cls,Username):
+
+        Clear_screan()
 
         print('The right pattern of birthday is YYYY-MM-DD','Example:2000-01-15','maximum valid birthday is:2018-12-31',sep ='\n')
         birth_day = input('Enter your birthday or press 0 to exit: ')

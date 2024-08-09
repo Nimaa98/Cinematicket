@@ -1,8 +1,14 @@
 
 
 from abc import ABC
-import re
+import re , os
 from noSQL_Database import Nosql_database
+
+
+
+
+def Clear_screan():
+    os.system('clear')
 
 
 class Bank(ABC):
@@ -15,6 +21,8 @@ class Bank(ABC):
 
 
     def set_Cart_number(self,cart_number):
+
+        Clear_screan()
 
         result , name , other_Username,other_user_data = Nosql_database.Check_cart_numbers(cart_number)
 
@@ -35,6 +43,8 @@ class Bank(ABC):
 
     def set_CVV2(self, cvv2):
 
+        Clear_screan()
+
         if len(cvv2) in (3,4) and cvv2.isdigit():
             self.cvv2 = cvv2
         else:
@@ -47,6 +57,8 @@ class Bank(ABC):
 
 
     def set_Password(self, password):
+
+        Clear_screan()
 
         if 3 < len(password) < 9 and password.isdigit():
             self.__password = password
@@ -62,6 +74,8 @@ class Bank(ABC):
 
 
     def set_Owner_name(self, owner_name):
+
+        Clear_screan()
 
         if len(owner_name) > 1 and owner_name.isalpha():
             self.owner_name = owner_name
@@ -92,6 +106,7 @@ class Bank_accounts(Bank):
     @classmethod
     def Add_amount(cls,Username,user_data,cart_number,cart_info,amount):
 
+        Clear_screan()
 
         balance = cart_info[3]
         balance += amount
@@ -107,6 +122,8 @@ class Bank_accounts(Bank):
 
     @classmethod
     def Sub_amount(cls, Username, user_data, cart_number, cart_info, amount):
+
+        Clear_screan()
 
         print(f'account owner name: {cart_info[0]}\n')
         cvv2 = input('Enter cart cvv2:\n')
@@ -137,6 +154,8 @@ class Bank_accounts(Bank):
     @classmethod
     def Transfer(cls,Username, user_data, cart_number, cart_info, amount,cart_dest_number):
 
+        Clear_screan()
+
         balance = cart_info[3]
         if balance - (amount + cls.Transaction_fees) < cls.Minmum:
             print('Not enough balance.\n')
@@ -165,6 +184,8 @@ class Bank_accounts(Bank):
 
     @classmethod
     def Transfer_result(cls,Username, user_data, cart_number, amount,cart_dest_number,other_Username,other_user_data):
+
+        Clear_screan()
 
         balance = user_data[Username][6][cart_number][3]
         other_balance = other_user_data[other_Username][6][cart_dest_number][3]
@@ -199,8 +220,10 @@ class Bank_accounts(Bank):
     @staticmethod
     def Manage_accounts(Username,user_data):
 
+        Clear_screan()
 
         while True:
+
             a = input('\npress 1 to Add bank account\n2 to see your accounts\n3 to change your balance\n0 to exit\n')
 
             if a == '1':
@@ -228,11 +251,14 @@ class Bank_accounts(Bank):
 
             else:
                 print('incorrect input try again')
+                Clear_screan()
 
 
 
     @classmethod
     def Add_account(cls,Username,user_data):
+
+        Clear_screan()
 
         print('\nThe right pattern of cart number is: aaaa-bbbb-cccc-dddd',
               'Example:3598-4322-9976-0912',sep ='\n')
@@ -261,6 +287,8 @@ class Bank_accounts(Bank):
 
     @classmethod
     def Show_accounts(cls,Username,user_data):
+
+        Clear_screan()
 
         if len(user_data[Username][6]) == 0:
 
@@ -300,6 +328,8 @@ class Change_Balance(Bank_accounts):
     @staticmethod
     def Select_cart(Username,user_data):
 
+        Clear_screan()
+
         a = ''
         user_accounts = user_data[Username][6]
 
@@ -329,6 +359,8 @@ class Change_Balance(Bank_accounts):
     @staticmethod
     def Check_digit(amount):
 
+        Clear_screan()
+
 
         if amount.isdigit() and int(amount) >= 10000:
 
@@ -341,6 +373,8 @@ class Change_Balance(Bank_accounts):
 
     @staticmethod
     def Manage_Balance(Username,user_data,cart_number,cart_info):
+
+        Clear_screan()
 
         while True:
             a = input('Select the transaction type:\n'

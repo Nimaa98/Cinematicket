@@ -1,5 +1,5 @@
 
-import re,getpass,hashlib,uuid
+import re,getpass,hashlib,uuid , os
 from noSQL_Database import Nosql_database
 from Subscription import Wallet , Manage
 from Reservation import Purchas
@@ -7,8 +7,18 @@ from Separator import User_role
 from Admin import Admin_application
 
 
+
+def Clear_screan():
+    os.system('clear')
+
+
+
+
+
 class User:
     ''' the coorect conditions for receiving entry in this class are determined'''
+
+
     users_info = {}
     names = []
 
@@ -24,6 +34,9 @@ class User:
 
     def set_Username(self,Username:str):
         ''' only valid names are allowed to register'''
+
+        Clear_screan()
+
         result, user_data = Nosql_database.Check(Username)
 
         if len(Username) == 0 or Username.isdigit():
@@ -45,6 +58,8 @@ class User:
     def set_phone_number(self,phone_number:str,Username:str):
         ''' only valid phone numbers are allowed to register '''
 
+        Clear_screan()
+
         if re.match(r'^09\d{9}$',phone_number) or phone_number == '' :
             self.phone_number = phone_number
         else:
@@ -64,6 +79,8 @@ class User:
     def set_password(self,password:str,Username:str):
         ''' only valid passwords are allowed to register '''
 
+        Clear_screan()
+
         if 3 < len(password)<9:
             self.__password = password
 
@@ -77,6 +94,9 @@ class User:
 
     def new_password(self,user_data,Username):
         ''' remove old passwords and set new passwords'''
+
+        Clear_screan()
+
         old_Username = Username
 
         old_password = getpass.getpass('Enter the current password:')
@@ -107,6 +127,8 @@ class User:
 
 class User_Application(User):
     ''' using the condetions set in the parent class , it creats instance and changes it if needed'''
+
+
     user_data ={}
 
     def __init__(self,Username:str,phone_number:str ,password:str,iid:str):
@@ -116,6 +138,8 @@ class User_Application(User):
     @classmethod
     def sign_up(cls):
         ''' registers new users'''
+
+        Clear_screan()
 
         Username = input('Enter your username:\n')
         
@@ -141,6 +165,8 @@ class User_Application(User):
 
         cls.users_info[Username] = [phone_number,password,iid,hash_password]
 
+
+
         return Username
 
 
@@ -148,6 +174,7 @@ class User_Application(User):
     def Login(cls):
         ''' if the correct information is enterd, the user will be allowed to enter the account'''
 
+        Clear_screan()
 
         Username = input('Enter your username to Login:\n')
 
@@ -180,15 +207,20 @@ class User_Application(User):
             else:
                 print('incorrect password.\n')
 
+        Clear_screan()
+
+
     def User_account(self):
         ''' it allows the user to choose between viewing information,editing and changing the password'''
 
+        Clear_screan()
         from Date import Date
         from bank_acounts import Bank_accounts
 
         Wallet.Auto_Change_subscription(self.Username,self.user_data)
 
         while True:
+
             b = input('press 1 to see your informations\n'
                       '2 to Edit your username\n'
                       '3 to change phone number\n'
@@ -227,26 +259,31 @@ class User_Application(User):
 
             else:
                 print('incorrect input try again')
+                Clear_screan()
+
+
 
 
     def __str__(self):
         ''' it allows the user to viewing information'''
 
-        print(
-            f'username is: {self.Username} \nphone_number is: {self.phone_number}'
-            f' \nuser id is: {self.iid} \nuser birthday is: {self.user_data[self.Username][4]}'
-            f'\nThe date of Registration is: {self.user_data[self.Username][5]}\n')
+        Clear_screan()
 
+        print(
+            f'\nusername is: {self.Username} \nphone_number is: {self.phone_number}'
+            f' \nuser id is: {self.iid} \nuser birthday is: {self.user_data[self.Username][4]}'
+            f'\nThe date of Registration is: {self.user_data[self.Username][5]}\n\n')
 
 
 
     def edit_Username(self,user_data,Username):
         ''' it allows the user to editing profile'''
-        #print(user_data)
+
+        Clear_screan()
 
         try:
             old_Username = Username
-            Username = input('Enter your new username:')
+            Username = input('Enter your new username:\n')
 
             if Username != old_Username:
                 self.set_Username(Username)
@@ -265,16 +302,20 @@ class User_Application(User):
             print('incorrect input\n')
 
 
+
+
     def edit_Phone_number(self,user_data,Username,phone_number):
+
+        Clear_screan()
 
         try:
             old_Username = Username
             old_phone_number = phone_number
-            phone_number = input('Enter your new phone_number:')
+            phone_number = input('\nEnter your new phone_number:\n')
 
             self.set_phone_number(phone_number, Username)
             if old_phone_number != phone_number:
-                print('your phone number has changed')
+                print('\nyour phone number has changed\n')
                 user_data[Username][0] = phone_number
 
             Nosql_database.Edit_data(user_data, old_Username, Username)
@@ -282,6 +323,9 @@ class User_Application(User):
 
         except ValueError:
             print('incorrect input\n')
+
+
+
 
 
 

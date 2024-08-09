@@ -1,6 +1,6 @@
 
 from noSQL_Database import Nosql_database
-from bank_acounts import Bank_accounts , Change_Balance
+from bank_acounts import Bank_accounts , Change_Balance , Clear_screan
 from datetime import datetime , timedelta, date
 
 
@@ -27,6 +27,8 @@ class Wallet:
 
     @staticmethod
     def Auto_Change_subscription(Username,user_data):
+
+        Clear_screan()
 
         wallet_id = user_data[Username][2]
 
@@ -68,6 +70,8 @@ class Wallet:
     @staticmethod
     def Take_cart_info(Username,user_data):
 
+        Clear_screan()
+
         if len(user_data[Username][6]) == 0:
             print('\nyou dont have any bank account pleas make one from manage account.\n')
 
@@ -85,6 +89,8 @@ class Manage(Wallet):
 
     @classmethod
     def Manage_wallet(cls,Username,user_data):
+
+        Clear_screan()
 
         cls.wallet_id = user_data[Username][2]
         while True:
@@ -109,12 +115,15 @@ class Manage(Wallet):
 
             else:
                 print('invalid input.')
+                Clear_screan()
 
 
 
 
     @classmethod
     def See_info(cls,Username,user_data):
+
+        Clear_screan()
 
         cls.wallet_id = user_data[Username][2]
         balance = user_data[Username][7][cls.wallet_id][2]
@@ -128,6 +137,8 @@ class Manage(Wallet):
 
     @classmethod
     def Recharg_wallet(cls,Username,user_data):
+
+        Clear_screan()
 
         cart_number, cart_info = Wallet.Take_cart_info(Username,user_data)
 
@@ -156,6 +167,8 @@ class Manage(Wallet):
 
     @classmethod
     def Explaination(cls,Username,user_data):
+
+        Clear_screan()
 
         print(50 * '-',
             '\nSubscriptions:\n'
@@ -188,6 +201,8 @@ class Manage(Wallet):
 
     @classmethod
     def Change_subscription(cls,Username, user_data,next_sub):
+
+        Clear_screan()
 
         amount = cls.subs_prices[next_sub]
 

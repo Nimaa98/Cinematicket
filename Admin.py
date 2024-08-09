@@ -4,6 +4,7 @@
 import getpass
 from noSQL_Database import Nosql_database
 from datetime import datetime
+from bank_acounts import Clear_screan
 
 
 
@@ -30,6 +31,9 @@ class Admin_application():
 			pass
 	
 	def Set_password(self,password):
+
+		Clear_screan()
+
 		if 8<len(password)<12:
 			self.password = password
 		else:
@@ -41,7 +45,8 @@ class Admin_application():
 	
 	@classmethod
 	def Sign_up(cls,Username):
-	
+
+		Clear_screan()
 		
 		password = input('\nEnter your password:\n')
 		
@@ -67,6 +72,8 @@ class Admin_application():
 	@staticmethod
 	def Login(password):
 
+		Clear_screan()
+
 		entered_password = getpass.getpass('Enter your password:\n')
 
 		if entered_password == password:
@@ -82,6 +89,8 @@ class Admin_application():
 
 	@staticmethod
 	def Account():
+
+		Clear_screan()
 
 		while True:
 			a = input('\nEnter 1 to Add New Movie'
@@ -99,10 +108,13 @@ class Admin_application():
 
 			else:
 				print('\nInvalid input\n')
+				Clear_screan()
 
 
 	@staticmethod
 	def Delet_Movie():
+
+		Clear_screan()
 
 		Movies = Nosql_database.Get_Movies()
 
@@ -127,6 +139,7 @@ class Admin_application():
 
 		else:
 			print('\nIncorrect name.try again later\n')
+			Clear_screan()
 
 
 
@@ -149,6 +162,8 @@ class New_Movie():
 
 	def Set_Movie_latin_name(self,Movie_latin_name):
 
+		Clear_screan()
+
 		for char in Movie_latin_name:
 			if (char.isascii() and char.isalpha()) or (char.isascii() and char.isdigit() or char.isspace()):
 				continue
@@ -163,6 +178,8 @@ class New_Movie():
 		self.Movie_latin_name = Movie_latin_name
 
 	def Set_Movie_farsi_name(self,Movie_farsi_name):
+
+		Clear_screan()
 
 		persion_range = ((0x0600,0x06FF),(0xFB00,0xFBFF),(0xFE70,0xFEFF),(0x0750,0x077F),(0x08A0,0x08FF))
 
@@ -193,6 +210,8 @@ class New_Movie():
 
 
 	def Set_Show_times(self,times):
+
+		Clear_screan()
 
 		Start_time = times
 
@@ -233,21 +252,25 @@ class New_Movie():
 	@staticmethod
 	def Set_Start_time(Start_time):
 
-			if Start_time != '':
-				try:
-					Time = datetime.strptime(Start_time,"%H:%M")
-					Time = Time.time()
-					return Time
+		Clear_screan()
 
-				except ValueError:
-					print('\nIncorrect start time')
+		if Start_time != '':
+			try:
+				Time = datetime.strptime(Start_time,"%H:%M")
+				Time = Time.time()
+				return Time
 
-			else:
-				Time = ''
-				return  Time
+			except ValueError:
+				print('\nIncorrect start time')
+
+		else:
+			Time = ''
+			return  Time
 
 
 	def Set_Capacity(self,capacity):
+
+		Clear_screan()
 
 		if 0 < int(capacity) <= 400:
 
@@ -260,6 +283,8 @@ class New_Movie():
 
 
 	def Set_Days_num_of_week(self,Days_num_of_week):
+
+		Clear_screan()
 
 		Days_num_of_week  = Days_num_of_week .split(',')
 
@@ -306,6 +331,8 @@ class New_Movie():
 
 	def Set_Genre(self,genre):
 
+		Clear_screan()
+
 		genre_list = ['جنایی', 'اجتماعی/درام', 'اکشن/کمدی', 'ترسناک', 'ترسناک/رازآلود',
 					  'تاریخی/درام/عاشقانه', 'خانوادگی/درام', 'کمدی']
 
@@ -322,6 +349,9 @@ class New_Movie():
 
 
 	def Set_Price(self,price):
+
+		Clear_screan()
+
 		if int(price) > 0:
 			self.Price = price
 			self.__class__.Movie[self.Movie_latin_name].append(int(price))
@@ -331,6 +361,8 @@ class New_Movie():
 			raise ValueError
 
 	def Set_Permissible_age(self,age):
+
+		Clear_screan()
 
 		if 0 <= int(age) < 41:
 			self.Permissible_age = age
@@ -354,6 +386,9 @@ class New_Movie():
 
 	@classmethod
 	def Add_Movie(cls):
+
+		Clear_screan()
+
 		times =[]
 
 		Movie_latin_name = input('\nEnter the Latin name of the movie:\n')
@@ -449,7 +484,3 @@ class New_Movie():
 				break
 
 
-#New_Movie.Add_Movie()
-#New_Movie.Set_Genre('کمدی/اکشن')
-
-#Admin_application.Delet_Movie()

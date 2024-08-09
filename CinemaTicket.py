@@ -1,7 +1,9 @@
 
-from User import User , User_Application
+from User import User , User_Application , Clear_screan
 from Date import Date
 from noSQL_Database import Nosql_database
+
+
 
 
 
@@ -11,7 +13,8 @@ while True:
        
          
      a = input('press 1 to register or 2 to Login or 0 to exit: ')
-              
+
+     Clear_screan()
              
      if a == '1':
           try:
