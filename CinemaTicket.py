@@ -1,17 +1,20 @@
 
+import logging
 from User import User , User_Application , Clear_screan
 from Date import Date
 from noSQL_Database import Nosql_database
+from Log_setting import Log_config
 
 
 
 
 
-
+Log_config()
+logging.info('شروع برنامه....\n\n')
 
 while True:
-       
-         
+
+
      a = input('press 1 to register or 2 to Login or 0 to exit: ')
 
      Clear_screan()
@@ -33,6 +36,7 @@ while True:
 
 
      elif a=='0':
+         logging.info('اتمام برنامه')
          break
 
      else:

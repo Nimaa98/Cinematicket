@@ -1,7 +1,7 @@
 from datetime import datetime , timedelta , time
 from noSQL_Database import Nosql_database
 from bank_acounts import Bank_accounts , Change_Balance , Clear_screan
-import math
+import math , logging
 
 
 class Movies():
@@ -23,17 +23,6 @@ class Movies():
 
 
 
-    def Movie_setter(self,movie):
-
-        Clear_screan()
-
-        if movie not in self.__class__.Movies_dict:
-
-            print(f'\n{movie} not found.\n')
-            raise ValueError
-
-
-
 
     def show_time_setter(self,show_time,day):
 
@@ -45,12 +34,24 @@ class Movies():
         hour = self.Movies_dict[self.movie][2][show_time][0][1]
         start_time = time(minute, hour)
 
-        if self.__class__.now.time() > start_time and day == today :
+        situation = self.Movies_dict[self.movie][2][show_time][2]
+
+        if situation == 'Active' and day == today and self.__class__.now.time() > start_time:
 
             print('\nThe time allowed to buy this ticket has expired.\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد منقضی شدن زمان پخش فیلم\n')
+
             raise ValueError
 
-        return start_time
+        elif situation == 'Deactive':
+            print('\nSelected movie will not be played at this hour.\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل اینکه فیلم انتخاب شده در این ساعت پخش نمی شود\n')
+
+            raise ValueError
+
+
+        else:
+            return start_time
 
 
 
@@ -67,6 +68,8 @@ class Movies():
         if day_number not in days:
 
             print(f'\nSelected Movie not play in {day}.\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل اینکه فیلم انتخاب شده در روز درخواستی کاربر پخش نمی شود \n')
+
             raise ValueError
 
 
@@ -88,6 +91,8 @@ class Purchas(Movies):
         date_format2 = "%Y-%m-%d"
         signup_date = datetime.strptime(signup_date,date_format2)
 
+        logging.info('دریافت تاریخ تولد و تاریخ ثبت نام کاربر از دیتابیس و ارسال آنها به توابع مربوطه')
+
         return birthday , signup_date
 
 
@@ -108,12 +113,22 @@ class Purchas(Movies):
                       '0 to exit\n')
 
             if b == '1':
+
+                logging.info(f'اقدام کاربر برای مشاهده لیست فیلم ها.\n')
+
+
                 View_seat.Cinema_program(cls.Movies_dict)
 
             elif b == '2':
+
+                logging.info(f'تصمیم کاربر برای انتخاب فیلم.\n')
+
                 Purchas.Select()
 
             elif b == '0':
+                logging.info(f'خروج از بخش رزرو فیلم.\n')
+                Clear_screan()
+
                 break
 
             else:
@@ -140,7 +155,7 @@ class Purchas(Movies):
             print(*chunk, sep='          ', end='\n')
 
 
-        movie = input('\nWhich movie are you going to watch?\n(Use English letters)\n ')
+        movie = input('\nWhich movie are you going to watch?\n(Use English letters)\n')
 
         day = input('\non which day do you plan to watch the movie??\n(Example: Friday)\n')
 
@@ -153,10 +168,10 @@ class Purchas(Movies):
 
             instance = cls(movie, day, show_time)
 
-            instance.Movie_setter(movie)
             instance.day_setter(movie,day)
             start_time = instance.show_time_setter(show_time,day)
 
+            logging.info(f'مشخص کردن نام و روز و ساعت پخش فیلم توسط کاربر.\n')
 
             print(f'\nInformation of the selected movie are:\n\n'
                   f'movie name: {cls.Movies_dict[movie][0]}\n'
@@ -169,8 +184,10 @@ class Purchas(Movies):
             Purchas.Limit(movie,show_time,day)
 
 
-        except (ValueError ,KeyError):
-            print('Try again')
+        except (ValueError , KeyError):
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن اطلاعات اشتباه(نام فیلم یا روز و ساعت پخش فیلم) توسط کاربر\n')
+
+            print('Try again\n')
 
 
     @classmethod
@@ -182,15 +199,23 @@ class Purchas(Movies):
 
         if cls.Movies_dict[movie][2][show_time][1][day] == 0:
             print('\nThe capacity is full\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل تکمیل بودن ظرفیت سینما در سانس درخواست شده\n')
+
 
 
         elif cls.Movies_dict[movie][5] > (cls.now.year - birthday.year):
             print('\nWatching this movie is not recommended for people under 18 years of age.\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل اینکه سن کاربر برای مشاهده فیلم درخواستی مجاز نمی باشد\n')
+
 
 
         else:
+            logging.info(f'ارسال اطلاعات مشخص شده توسط کاربر به تابع محاسبه تخفیف.\n')
             price = Purchas.Apply_discount(cls.Movies_dict[movie][4])
+
+            logging.info(f'ارسال اطلاعات مشخص شده توسط کاربر به تابع خربد فیلم.\n')
             Purchas.Buy(movie, day, show_time, cls.Movies_dict[movie][2][show_time][1][day], price)
+
 
 
 
@@ -225,8 +250,10 @@ class Purchas(Movies):
             print('\nHappy Birthday'
                   '\nCinema Ticket gift to you is a 50% discount on your birthday\n')
 
+        logging.info(f'اعمال تخفیف های مورد نظر روی قیمت اصلی فیلم.\n')
 
         return price
+
 
     @classmethod
     def Buy(cls,movie,day,show_time,capacity,price):
@@ -240,7 +267,10 @@ class Purchas(Movies):
                   '\nif you want use your wallet press 1'
                   '\nor press 2 to use your bank account:\n')
 
+
         if a == '1':
+
+            logging.info(f'تصمیم کاربر به خرید فیلم با استفاده از کیف پول.\n')
 
             balance = cls.user_data[cls.Username][7][wallet_id][2]
 
@@ -256,11 +286,19 @@ class Purchas(Movies):
                 Nosql_database.Add(cls.user_data)
                 Nosql_database.Update_Movies(cls.Movies_dict)
 
+                logging.info(f'خرید موفقیت آمیز فیلم.\n')
+
+
             else:
                 print('not enough balance.\nplease charge your wallet first.\n')
+                logging.warning('.عدم اجرای درخواست کاربر به دلیل موجودی ناکافی کیف پول\n')
+
 
 
         elif a == '2':
+
+            logging.info(f'تصمیم کاربر به خرید فیلم با استفاده از حساب بانکی.\n')
+
 
             try:
                 Bank_accounts.Show_accounts(cls.Username,cls.user_data)
@@ -276,6 +314,9 @@ class Purchas(Movies):
                 print('\nSeat Reservation was successful.\n')
                 Nosql_database.Update_Movies(cls.Movies_dict)
 
+                logging.info(f'خرید موفقیت آمیز فیلم.\n')
+
+
 
             except (ValueError , TypeError):
                 print('\ntry again later\n')
@@ -283,6 +324,8 @@ class Purchas(Movies):
 
         else:
             print('\nIncorrect input')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن اطلاعات اشتباه توسط کاربر\n')
+
 
 
 
@@ -315,7 +358,7 @@ class View_seat(Movies):
 
         flag = True
 
-        
+
         print('\nMovies list:',60 * '-',sep='\n')
 
         date_range = View_seat.Calc_date_range()
@@ -323,7 +366,7 @@ class View_seat(Movies):
 
         for i in date_range:
 
-            
+
             print(i,i.strftime('%A'),i.weekday(),sep='   ')
             print('Cinema', i.strftime('%A'), 'Program:\n')
 
@@ -361,10 +404,15 @@ class View_seat(Movies):
             flag = False
 
 
+        logging.info(f'ارسال موفقیت آمیز برنامه هفتگی سینما از دیتابیس.\n')
+
+
+
+
     @classmethod
     def Show_Time(cls,key,Movies_dict,now):
 
-        Clear_screan()
+        #Clear_screan()
 
         day = now.strftime('%A')
         now = now.time()
@@ -381,7 +429,7 @@ class View_seat(Movies):
             night_start = time(*Movies_dict[movie][2]["Night_ShowTime"][0])
             start_times = []
 
-            
+
             print(f'\nMovie name: {movie}\n'
                   f'Movie farsi name: {cls.new_Movie_dict[movie][0]}\n'
                   f'Movie genre: {cls.new_Movie_dict[movie][3]}\n'
@@ -407,8 +455,8 @@ class View_seat(Movies):
 
                 n += 1
 
-            View_seat.Auto_Change_capacity(Movies_dict,movie,start_times,day,now)
 
+            View_seat.Auto_Change_capacity(Movies_dict,movie,start_times,day,now)
 
 
 
@@ -417,7 +465,6 @@ class View_seat(Movies):
     @classmethod
     def Auto_Change_capacity(cls,Movies_dict,movie,start_times,day,now):
 
-        Clear_screan()
 
         if  max(start_times) < now :
 
@@ -428,6 +475,9 @@ class View_seat(Movies):
             Movies_dict[movie][2]["Night_ShowTime"][1][day] = Movies_dict[movie][6]
 
             Nosql_database.Update_Movies(Movies_dict)
+
+            logging.info(f'آپدیت کردن ظرفیت فیلم پس از پایان روز.\n')
+
 
 
 

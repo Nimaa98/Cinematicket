@@ -1,11 +1,11 @@
 
-import re,getpass,hashlib,uuid , os
+import re,getpass,hashlib,uuid , os , logging
 from noSQL_Database import Nosql_database
 from Subscription import Wallet , Manage
 from Reservation import Purchas
 from Separator import User_role
 from Admin import Admin_application
-
+from Log_setting import Log_config
 
 
 def Clear_screan():
@@ -41,12 +41,16 @@ class User:
 
         if len(Username) == 0 or Username.isdigit():
             print('username must have at least 1 letter\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن نام نادرست\n')
+
             raise ValueError
 
 
         self.names.append(Username)
         if self.names.count(Username) == 2 or result:
             print('the entered name is duplicate or has been selected by another user.\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن نام نادرست\n')
+
             self.names.remove((Username))
             raise ValueError
         self.Username = Username
@@ -64,6 +68,8 @@ class User:
             self.phone_number = phone_number
         else:
             print('invalid phone number')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن شماره تلفن نادرست\n')
+
             self.names.remove((Username))
             raise ValueError
 
@@ -86,6 +92,8 @@ class User:
 
         else:
             print('invalid password')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن پسورد نادرست\n')
+
             self.names.remove((Username))
             raise ValueError
 
@@ -96,6 +104,8 @@ class User:
         ''' remove old passwords and set new passwords'''
 
         Clear_screan()
+        logging.info(f'\nاقدام کاربر برای تغییر پسورد.')
+
 
         old_Username = Username
 
@@ -104,12 +114,18 @@ class User:
         new_password_2 = getpass.getpass('Enter new password again:')
         if old_password != self.__password:
             print('incorrect password')
+            logging.warning('.عدم تغییر رمز بدلبل وارد کردن رمز اشتباه\n')
+
 
         elif old_password == new_password_1:
             print('the entered password is duplicate.\n')
+            logging.warning('.عدم تغییر رمز بدلبل وارد کردن رمز تکراری\n')
+
 
         elif new_password_1 != new_password_2:
             print('the entered passwords do not match.\n')
+            logging.warning('.عدم تغییر رمز بدلبل وارد کردن رمز اشتباه\n')
+
         else:
             new_password = new_password_1
             self.__password = new_password
@@ -118,6 +134,7 @@ class User:
             user_data[Username][1] = new_password
             user_data[Username][3] = hash_password
             print('your password changed.\n')
+            logging.info(f'\n تغییر پسورد کاربر انجام شد. ')
 
             Nosql_database.Edit_data(user_data, old_Username, Username)
 
@@ -140,6 +157,7 @@ class User_Application(User):
         ''' registers new users'''
 
         Clear_screan()
+        logging.info('.ثبت نام کاربر جدید\n')
 
         Username = input('Enter your username:\n')
         
@@ -176,6 +194,9 @@ class User_Application(User):
 
         Clear_screan()
 
+        logging.info('.اقدام کاربر برای ورود به حساب کاربری\n')
+
+
         Username = input('Enter your username to Login:\n')
 
         result ,cls.user_data = Nosql_database.Check(Username)
@@ -185,18 +206,21 @@ class User_Application(User):
 
         if flag:
 
-            Admin_application.Login(password)
+            Admin_application.Login(password,Username)
 
 
         elif Username not in cls.users_info and not result:
 
             print('No user found with this name.\n')
+            logging.warning('.عدم ورود به حساب کاربری به دلیل وارد کردن نام نادرست\n')
+
 
         else:
             password = getpass.getpass('Enter your password:\n')
             if cls.hash_password(password) == cls.user_data[Username][3]:
 
                 print('\nLogin was done successfully\n')
+                logging.info(f'{Username}  ورود به حساب کاربری توسط کاربر\n')
 
                 phone_number , iid = cls.user_data[Username][0] , cls.user_data[Username][2]
 
@@ -206,8 +230,9 @@ class User_Application(User):
 
             else:
                 print('incorrect password.\n')
+                logging.warning('.عدم ورود به حساب کاربری به دلیل وارد کردن پسورد نادرست\n')
 
-        Clear_screan()
+
 
 
     def User_account(self):
@@ -243,23 +268,35 @@ class User_Application(User):
 
             elif b == '5':
 
+                logging.info(f'  اقدام کاربر برای مشاهده وضعیت حساب های بانکی.\n')
+
                 Bank_accounts.Manage_accounts(self.Username,self.user_data)
 
             elif b == '6':
 
+                logging.info(f'اقدام کاربر برای ورود به بخش اشتراک و کیف پول.\n')
+
                 Manage.Manage_wallet(self.Username,self.user_data)
+
+
 
             elif b == '7':
 
+                logging.info(f'اقدام کاربر برای ورود به بخش رزرو فیلم.\n')
+
                 Purchas.Choose(self.Username,self.user_data)
+
 
             elif b == '0':
                 print('you have logged out of your account\n')
+                logging.info(f'{self.Username}  خروج از حساب کاربری توسط کاربر\n')
                 break
 
             else:
-                print('incorrect input try again')
                 Clear_screan()
+                print('incorrect input try again')
+
+
 
 
 
@@ -268,6 +305,7 @@ class User_Application(User):
         ''' it allows the user to viewing information'''
 
         Clear_screan()
+        logging.info(f'\n{self.Username}  .نمایش اطلاعات کاربر')
 
         print(
             f'\nusername is: {self.Username} \nphone_number is: {self.phone_number}'
@@ -280,6 +318,8 @@ class User_Application(User):
         ''' it allows the user to editing profile'''
 
         Clear_screan()
+        logging.info(f'\n اقدام کاربر برای تغییر نام کاربری.')
+
 
         try:
             old_Username = Username
@@ -288,6 +328,7 @@ class User_Application(User):
             if Username != old_Username:
                 self.set_Username(Username)
                 print('your username has changed\n')
+                logging.info(f'\n .تغییر نام کاربر انجام شد.')
 
                 user_data[Username] = user_data.pop(old_Username)
                 Nosql_database.Edit_data(user_data,old_Username,Username)
@@ -307,6 +348,8 @@ class User_Application(User):
     def edit_Phone_number(self,user_data,Username,phone_number):
 
         Clear_screan()
+        logging.info(f'\nاقدام کاربر برای تغییر شماره تلفن  ')
+
 
         try:
             old_Username = Username
@@ -316,6 +359,8 @@ class User_Application(User):
             self.set_phone_number(phone_number, Username)
             if old_phone_number != phone_number:
                 print('\nyour phone number has changed\n')
+                logging.info(f'\n تغییر شماره تلفن کاربر انجام شد.')
+
                 user_data[Username][0] = phone_number
 
             Nosql_database.Edit_data(user_data, old_Username, Username)

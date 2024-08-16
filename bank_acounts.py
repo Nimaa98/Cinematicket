@@ -1,7 +1,7 @@
 
 
 from abc import ABC
-import re , os
+import re , os , logging
 from noSQL_Database import Nosql_database
 
 
@@ -33,6 +33,8 @@ class Bank(ABC):
 
         else:
             print('Cart Number is Wrong  or used by another user.\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن کارت بانکی نادرست\n')
+
             raise ValueError
 
 
@@ -49,6 +51,7 @@ class Bank(ABC):
             self.cvv2 = cvv2
         else:
             print('Wrong CVV2\n')
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن CVV2 نادرست\n')
             raise ValueError
 
 
@@ -65,7 +68,7 @@ class Bank(ABC):
 
         else:
             print('invalid password\n')
-            # self.user_accounts.popitem((cart_number))
+            logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن پسورد نادرست\n')
             raise ValueError
 
     def Password(self):
@@ -82,7 +85,7 @@ class Bank(ABC):
 
         else:
             print('invalid name\n')
-            # self.user_accounts.popitem((cart_number))
+            logging.warning('عدم اجرای درخواست کاربر به دلیل اینکه نام صاحب حساب اشتباه وارد شده است.\n')
             raise ValueError
 
     def Owner_name(self):
@@ -115,10 +118,7 @@ class Bank_accounts(Bank):
         Nosql_database.Add(user_data)
 
         print(f'The transaction was completed successfully.\n')
-
-
-
-
+        logging.info('انجام موفقیت آمیز تراکنش .\n')
 
     @classmethod
     def Sub_amount(cls, Username, user_data, cart_number, cart_info, amount):
@@ -133,6 +133,8 @@ class Bank_accounts(Bank):
         balance = cart_info[3]
         if balance - (amount + cls.Transaction_fees) < cls.Minmum:
             print('Not enough balance.\n')
+            logging.warning('عدم اجرای درخواست کاربر به دلیل عدم موجودی کافی.\n')
+
             raise ValueError
 
         if cvv2 == cart_info[1] and password == cart_info[2]:
@@ -140,11 +142,15 @@ class Bank_accounts(Bank):
             balance -= amount + cls.Transaction_fees
 
             print('\nThe transaction was completed successfully.\n')
+            logging.info('انجام موفقیت آمیز تراکنش .\n')
+
             user_data[Username][6][cart_number][3] = balance
             Nosql_database.Add(user_data)
             return amount
         else:
             print('\ncvv2 or password is incorrect.\ntry again later.\n')
+            logging.warning('عدم اجرای درخواست کاربر به دلیل اینکه password یا CVV2 اشتباه وارد شده است.\n')
+
             raise ValueError
 
 
@@ -156,9 +162,17 @@ class Bank_accounts(Bank):
 
         Clear_screan()
 
+        if cart_number == cart_dest_number:
+            print('\ncart number and cart dest number are the same.\n')
+            logging.warning('عدم اجرای درخواست کاربر به دلیل یکسان بودن کارت مبدا و مقصد.\n')
+
+            raise ValueError
+
         balance = cart_info[3]
         if balance - (amount + cls.Transaction_fees) < cls.Minmum:
             print('Not enough balance.\n')
+            logging.warning('عدم اجرای درخواست کاربر به دلیل عدم موجودی کافی.\n')
+
             raise ValueError
 
         result, name , other_Username,other_user_data = Nosql_database.Check_cart_numbers(cart_dest_number)
@@ -177,6 +191,8 @@ class Bank_accounts(Bank):
 
         else:
             print('cart number not found or wrong cvv2/password.\n')
+            logging.warning('عدم اجرای درخواست کاربر به دلیل اینکه password یا CVV2 یا شماره کارت اشتباه وارد شده است.\n')
+
 
 
 
@@ -213,6 +229,8 @@ class Bank_accounts(Bank):
             Nosql_database.Add(user_data)
 
         print('successfully transferd.\n')
+        logging.info('انجام موفقیت آمیز تراکنش .\n')
+
 
 
 
@@ -228,15 +246,20 @@ class Bank_accounts(Bank):
 
             if a == '1':
                 try:
+                    logging.info(f'اقدام کاربر برای اضافه کردن حساب بانکی.\n')
                     Bank_accounts.Add_account(Username, user_data)
+
 
                 except ValueError:
                     print('try again')
 
             elif a == '2':
+                logging.info(f'مشاهده حساب های بانکی.\n')
+
                 Bank_accounts.Show_accounts(Username,user_data)
 
             elif a == '3':
+                logging.info(f'اقدام کاربر برای تغییر موجودی حساب بانکی.\n')
 
                 Bank_accounts.Show_accounts(Username, user_data)
                 cart_number , cart_info = Change_Balance.Select_cart(Username,user_data)
@@ -247,6 +270,8 @@ class Bank_accounts(Bank):
 
 
             elif a == '0':
+                logging.info(f'خروج کاربر از بخش حساب های بانکی .\n')
+                Clear_screan()
                 break
 
             else:
@@ -282,6 +307,8 @@ class Bank_accounts(Bank):
 
 
         print(f'\nyour cart number added.\n')
+        logging.info(f'کارت بانکی جدید اضافه شد.\n')
+
 
 
 
@@ -296,12 +323,18 @@ class Bank_accounts(Bank):
 
             if a == 'yes' or a =='YES':
                 try:
+                    logging.info(f'  عدم مشاهده ی حساب های بانکی بدلیل اینکه هنوز شماره کارتی وارد نشده است ---> هدایت کاربر به بخش وارد کردن حساب بانکی.\n')
+
                     Bank_accounts.Add_account(Username,user_data)
 
                 except ValueError:
                     print('try again')
 
             elif a == 'no':
+
+                logging.info(
+                    f'  عدم مشاهده ی حساب های بانکی بدلیل اینکه هنوز شماره کارتی وارد نشده است ---> عدم تمایل کاربر به وارد کردن حساب بانکی جدید.\n')
+
                 Bank_accounts.Manage_accounts(Username,user_data)
                 print('\n')
 
@@ -336,8 +369,10 @@ class Change_Balance(Bank_accounts):
         if len(user_data[Username][6]) != 0:
             a = input('\nEnter the account number with which you want to make a transaction or charge wallet:\n')
 
-
         if a.isdigit() and 0 < int(a) <= len(user_accounts):
+
+            logging.info(f'انتخاب کارت بانکی توسط کاربر.\n')
+
 
             a = int(a)
             a -=1
@@ -352,8 +387,10 @@ class Change_Balance(Bank_accounts):
             return cart_number , cart_info
 
         print('No card was selected.\n')
+        logging.warning(f'عدم انتخاب کارت بانکی توسط کاربر.\n')
 
         return None , None
+
 
 
     @staticmethod
@@ -368,6 +405,8 @@ class Change_Balance(Bank_accounts):
             return True ,amount
 
         print(f'\n{amount} is a invalid amount\n')
+        logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن مبلغ نادرست\n')
+
         return False , amount
 
 
@@ -381,7 +420,10 @@ class Change_Balance(Bank_accounts):
                       '1 for add balance\n2 for sub balance\n'
                       '3 for transfer money\n0 for exit\n')
 
+
             if a == '1':
+
+                logging.info(f'تصمیم کاربر به افزایش موجودی.\n')
 
                 print(f'account owner name: {cart_info[0]}\n')
 
@@ -394,6 +436,9 @@ class Change_Balance(Bank_accounts):
                     Bank_accounts.Add_amount(Username,user_data,cart_number,cart_info,amount)
 
             elif a == '2':
+
+                logging.info(f'تصمیم کاربر به کاهش موجودی.\n')
+
                 amount = input('Enter the amount you want to withdraw from the account:\n')
 
                 result, amount = Change_Balance.Check_digit(amount)
@@ -406,6 +451,9 @@ class Change_Balance(Bank_accounts):
 
 
             elif a == '3':
+
+                logging.info(f'تصمیم کاربر به انتقال وجه.\n')
+
                 amount = input('Enter the amount you want to transfer:\n')
 
                 cart_dest_number = input('Enter the destination card number:\n')
@@ -420,6 +468,7 @@ class Change_Balance(Bank_accounts):
 
 
             elif a =='0':
+                logging.info(f'انصراف کاربر از تراکنش بانکی.\n')
                 break
 
 

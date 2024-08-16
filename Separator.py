@@ -2,6 +2,7 @@
 
 from enum import Enum
 from Admin import Admin_application
+import logging
  
  
 class User_role(Enum):
@@ -20,6 +21,8 @@ class User_role(Enum):
         Username = Username[:19]
 
         if Username == User_role.Admin.value:
+
+            logging.info('.ثبت نام ادمین جدید\n')
 
             return Admin_application.Sign_up(role)
 

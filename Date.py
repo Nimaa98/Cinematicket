@@ -1,8 +1,10 @@
+import logging
 import re
 from noSQL_Database import Nosql_database
 from User import User,User_Application , Clear_screan
 from datetime import date
 from Subscription import Wallet
+from Log_setting import Log_config
 
 
 
@@ -25,10 +27,17 @@ class Check_birthday:
 
         else:
             print('Incorrect date!', '\n')
+            logging.warning('.عدم ثبت نام کاربر به دلیل وارد کردن تاریخ تولد نادرست\n')
+
             Date.Birthday(Username)
+
+
 
     def get_birthday(self):
         return self.birthday
+
+
+
 
     @classmethod
     def Make_account(cls,Username,birth_day):
@@ -48,6 +57,8 @@ class Check_birthday:
 
         print('Registration was successfull', '\n')
 
+        logging.info('ثبت نام کاربر جدیدبا موفقیت انجام شد.\n')
+
 
 
 class Date(Check_birthday):
@@ -55,6 +66,8 @@ class Date(Check_birthday):
 
     def __init__(self,birth_day):
         self.birth_day = birth_day
+
+
 
     @classmethod
     def Birthday(cls,Username):

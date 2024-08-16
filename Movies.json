@@ -46,7 +46,7 @@
         {
             "Morning_ShowTime": [
                 [
-                    9,
+                    1,
                     0
                 ],
                 {
@@ -59,7 +59,7 @@
             ],
             "Afternoon_ShowTime": [
                 [
-                    16,
+                    2,
                     0
                 ],
                 {
@@ -72,7 +72,7 @@
             ],
             "Night_ShowTime": [
                 [
-                    22,
+                    3,
                     0
                 ],
                 {
