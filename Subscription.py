@@ -16,7 +16,8 @@ class Wallet:
 
 
     @classmethod
-    def wallet(cls,Username,user_data,):
+    def wallet(cls,Username:str,user_data:dict)-> dict:
+        '''Creating a wallet automatically by the program for the user'''
 
         cls.wallet_id = user_data[Username][2]
         signup_date = user_data[Username][5]
@@ -31,7 +32,8 @@ class Wallet:
 
 
     @staticmethod
-    def Auto_Change_subscription(Username,user_data):
+    def Auto_Change_subscription(Username:str,user_data:dict)-> None:
+        '''Expire user subscription after one month and set subscription to bronze level'''
 
         Clear_screan()
 
@@ -75,7 +77,8 @@ class Wallet:
 
 
     @staticmethod
-    def Take_cart_info(Username,user_data):
+    def Take_cart_info(Username:str,user_data:dict)-> None| dict:
+        '''Get the user's bank account information from the database'''
 
         Clear_screan()
 
@@ -98,8 +101,8 @@ class Manage(Wallet):
 
 
     @classmethod
-    def Manage_wallet(cls,Username,user_data):
-
+    def Manage_wallet(cls,Username:str,user_data:dict) -> None:
+        ''' it allows the user to choose between viewing wallet information,Increasing wallet balance and purchasing subscription'''
         Clear_screan()
 
         cls.wallet_id = user_data[Username][2]
@@ -139,7 +142,8 @@ class Manage(Wallet):
 
 
     @classmethod
-    def See_info(cls,Username,user_data):
+    def See_info(cls,Username:str,user_data:dict) -> None:
+        '''View subscription status and wallet balance'''
 
         Clear_screan()
 
@@ -158,7 +162,8 @@ class Manage(Wallet):
 
 
     @classmethod
-    def Recharg_wallet(cls,Username,user_data):
+    def Recharg_wallet(cls,Username:str,user_data:dict)-> None:
+        '''Increase wallet balance if possible'''
 
         Clear_screan()
 
@@ -195,7 +200,8 @@ class Manage(Wallet):
 
 
     @classmethod
-    def Explaination(cls,Username,user_data):
+    def Explaination(cls,Username:str,user_data:dict)-> None:
+        '''Viewing site subscription information and selecting the user's desired subscription'''
 
         Clear_screan()
 
@@ -234,7 +240,8 @@ class Manage(Wallet):
 
 
     @classmethod
-    def Change_subscription(cls,Username, user_data,next_sub):
+    def Change_subscription(cls,Username:str, user_data:dict,next_sub:str)-> None:
+        '''Buy a subscription with a wallet or bank account'''
 
         Clear_screan()
 

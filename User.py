@@ -5,10 +5,13 @@ from Subscription import Wallet , Manage
 from Reservation import Purchas
 from Separator import User_role
 from Admin import Admin_application
-from Log_setting import Log_config
 
 
-def Clear_screan():
+
+
+def Clear_screan() -> None:
+    ''' Clears the screen'''
+
     os.system('clear')
 
 
@@ -32,7 +35,7 @@ class User:
 
 
 
-    def set_Username(self,Username:str):
+    def set_Username(self,Username:str) -> None :
         ''' only valid names are allowed to register'''
 
         Clear_screan()
@@ -55,11 +58,11 @@ class User:
             raise ValueError
         self.Username = Username
 
-    def get_Username(self):
+    def get_Username(self) -> str:
         return self.Username
 
 
-    def set_phone_number(self,phone_number:str,Username:str):
+    def set_phone_number(self,phone_number:str,Username:str) -> None:
         ''' only valid phone numbers are allowed to register '''
 
         Clear_screan()
@@ -73,16 +76,16 @@ class User:
             self.names.remove((Username))
             raise ValueError
 
-    def get_phone_number(self):
+    def get_phone_number(self) -> str:
         return self.phone_number
 
     @staticmethod
-    def hash_password(password:str):
+    def hash_password(password:str) -> str:
         '''hashing password with sha256'''
         return hashlib.sha256(password.encode('utf-8')).hexdigest()
 
 
-    def set_password(self,password:str,Username:str):
+    def set_password(self,password:str,Username:slice) -> None:
         ''' only valid passwords are allowed to register '''
 
         Clear_screan()
@@ -97,10 +100,10 @@ class User:
             self.names.remove((Username))
             raise ValueError
 
-    def get_password(self):
+    def get_password(self) -> str:
         return self.__password
 
-    def new_password(self,user_data,Username):
+    def new_password(self,user_data:dict,Username:slice) -> None:
         ''' remove old passwords and set new passwords'''
 
         Clear_screan()
@@ -153,7 +156,7 @@ class User_Application(User):
         super().__init__(Username,phone_number ,password,iid)
 
     @classmethod
-    def sign_up(cls):
+    def sign_up(cls) -> str | None:
         ''' registers new users'''
 
         Clear_screan()
@@ -189,7 +192,7 @@ class User_Application(User):
 
 
     @classmethod
-    def Login(cls):
+    def Login(cls) -> None:
         ''' if the correct information is enterd, the user will be allowed to enter the account'''
 
         Clear_screan()
@@ -235,11 +238,10 @@ class User_Application(User):
 
 
 
-    def User_account(self):
+    def User_account(self) -> None:
         ''' it allows the user to choose between viewing information,editing and changing the password'''
 
         Clear_screan()
-        from Date import Date
         from bank_acounts import Bank_accounts
 
         Wallet.Auto_Change_subscription(self.Username,self.user_data)
@@ -301,7 +303,7 @@ class User_Application(User):
 
 
 
-    def __str__(self):
+    def __str__(self) -> str:
         ''' it allows the user to viewing information'''
 
         Clear_screan()
@@ -314,8 +316,8 @@ class User_Application(User):
 
 
 
-    def edit_Username(self,user_data,Username):
-        ''' it allows the user to editing profile'''
+    def edit_Username(self,user_data:dict,Username:str) -> None:
+        ''' it allows the user to editing Username'''
 
         Clear_screan()
         logging.info(f'\n اقدام کاربر برای تغییر نام کاربری.')
@@ -345,7 +347,9 @@ class User_Application(User):
 
 
 
-    def edit_Phone_number(self,user_data,Username,phone_number):
+    def edit_Phone_number(self,user_data:dict,Username:str,phone_number:str) -> None:
+        ''' it allows the user to editing Phone number'''
+
 
         Clear_screan()
         logging.info(f'\nاقدام کاربر برای تغییر شماره تلفن  ')

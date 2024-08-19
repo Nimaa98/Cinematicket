@@ -10,11 +10,13 @@ class User_role(Enum):
 
     Admin = 'Admin_CinemaTicket_'
 
-    def __str__(self):
+    def __str__(self) ->str:
+        '''Returns the specified expression for admin'''
 
         return self.value
 
-    def Check_user_role(role):
+    def Check_user_role(role) -> None:
+        '''If the new admin wants to register, his name will be sent to the registration function'''
 
         Username = role
 

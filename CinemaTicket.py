@@ -2,7 +2,6 @@
 import logging
 from User import User , User_Application , Clear_screan
 from Date import Date
-from noSQL_Database import Nosql_database
 from Log_setting import Log_config
 
 

@@ -4,7 +4,6 @@ from noSQL_Database import Nosql_database
 from User import User,User_Application , Clear_screan
 from datetime import date
 from Subscription import Wallet
-from Log_setting import Log_config
 
 
 
@@ -12,7 +11,8 @@ class Check_birthday:
     bank_acounts = {}
     wallet = {}
 
-    def set_birthday(self,birth_day,Username):
+    def set_birthday(self,birth_day:str,Username:str)->None:
+        ''' only valid birthdays are allowed to register'''
 
         Clear_screan()
 
@@ -40,7 +40,8 @@ class Check_birthday:
 
 
     @classmethod
-    def Make_account(cls,Username,birth_day):
+    def Make_account(cls,Username:str,birth_day:str)->None:
+        '''Creating an account for the user'''
 
         Clear_screan()
 
@@ -64,13 +65,16 @@ class Check_birthday:
 class Date(Check_birthday):
     users_info = User.users_info
 
-    def __init__(self,birth_day):
+    def __init__(self,birth_day:str):
+        ''' one main attribute are defined in this function'''
+
         self.birth_day = birth_day
 
 
 
     @classmethod
-    def Birthday(cls,Username):
+    def Birthday(cls,Username:str)->None:
+        '''Get the user's date of birth during registration'''
 
         Clear_screan()
 
@@ -83,7 +87,8 @@ class Date(Check_birthday):
 
 
     @staticmethod
-    def Check_users_info():
+    def Check_users_info()->None:
+        '''Deleting user information from temporary memory due to completion of registration or failed registration'''
 
         User.users_info.popitem()
         User.names.pop()

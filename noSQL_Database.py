@@ -9,8 +9,8 @@ class Nosql_database:
     name = ''
 
     @classmethod
-    def Add(cls,users_info):
-
+    def Add(cls,users_info:dict) -> None:
+        ''' adding Users to database'''
 
         with open('users_info.json', 'r',encoding='utf-8') as file:
             cls.data = json.load(file)
@@ -21,7 +21,9 @@ class Nosql_database:
             json.dump(cls.data, f ,ensure_ascii=False, indent=4)
 
     @classmethod
-    def Check(cls,Username):
+    def Check(cls,Username:str)-> tuple[bool,dict]:
+        '''Checks whether the name entered by the user is available in the
+         database or not and if it is, return user information'''
 
         user_data = {}
 
@@ -38,8 +40,11 @@ class Nosql_database:
             return True , user_data
         return False , user_data
 
+
+
     @staticmethod
-    def Edit_data(user_data,old_Username,Username):
+    def Edit_data(user_data:dict,old_Username:str,Username:str)-> None:
+        '''After editing the information by the user, the new information is entered in the database'''
 
         with open('users_info.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -53,7 +58,8 @@ class Nosql_database:
 
 
     @staticmethod
-    def Check_cart_numbers(cart_number):
+    def Check_cart_numbers(cart_number:str)-> tuple[bool,str,str,dict]:
+        '''Checks whether the entered card number is available in the database or not'''
 
         name = ''
         other_Username = ''
@@ -78,18 +84,22 @@ class Nosql_database:
 
 
     @staticmethod
-    def Accounts_info(Username):
+    def Accounts_info(Username:str)->None:
+        '''imports user information from the database'''
 
-        with open('users_info.json', 'r', encoding='utf-8') as f:
+        with open('users_info.json', 'r',encoding='utf-8') as f:
             data = json.load(f)
 
-            user_data = data[Username][6]
-            print(user_data)
+            user_date = data[Username][6]
+            return user_date
 
-            return user_data
+
+
+
 
     @staticmethod
     def Movies_info():
+        '''It returns the list of movies along with their information'''
 
         with open('Movies.json', 'r', encoding='utf-8') as f:
             Movies_dict = json.load(f)
@@ -98,15 +108,10 @@ class Nosql_database:
             return Movies_dict
 
 
-    @staticmethod
-    def Update_Movies(Movies_dict):
-
-        with open('Movies.json', '+w', encoding='utf-8') as f:
-            json.dump(Movies_dict, f ,ensure_ascii=False, indent=4)
-
 
     @classmethod
     def Add_Admin(cls,Admin_info):
+        '''Enters new admin information into the database'''
 
         with open('Admin_info.json', 'r',encoding='utf-8') as file:
             cls.data = json.load(file)
@@ -119,6 +124,7 @@ class Nosql_database:
 
     @classmethod
     def Check_Admin_name(cls,Username):
+        '''It checks whether the admin name exists in the database or not'''
 
         with open('Admin_info.json', 'r',encoding='utf-8') as file:
             cls.data = json.load(file)
@@ -133,7 +139,7 @@ class Nosql_database:
 
     @classmethod
     def Add_Movie(cls,Movie):
-
+        '''Add the new movies to the database'''
 
         with open('Movies.json', 'r',encoding='utf-8') as file:
             cls.data = json.load(file)
@@ -145,8 +151,17 @@ class Nosql_database:
 
 
 
+    @staticmethod
+    def Update_Movies(Movies_dict:str)->None:
+        '''Enter the capacity of the cinema in the database after the change.'''
+
+        with open('Movies.json', '+w',encoding='utf-8') as f:
+            json.dump(Movies_dict,f,ensure_ascii=False,indent=4)
+
+
     @classmethod
-    def Delet_Movie(cls,Movie):
+    def Delete_Movie(cls,Movie):
+        '''delete the selected movie from database'''
 
         with open('Movies.json', 'r',encoding='utf-8') as file:
             cls.data = json.load(file)
@@ -157,16 +172,6 @@ class Nosql_database:
         with open('Movies.json','+w',encoding='utf-8') as f:
             json.dump(cls.data, f ,ensure_ascii=False, indent=4)
 
-
-
-    @classmethod
-    def Get_Movies(cls):
-
-        with open('Movies.json', 'r',encoding='utf-8') as file:
-            cls.data = json.load(file)
-
-
-        return cls.data
 
 
 

@@ -15,7 +15,10 @@ class Movies():
 
 
 
-    def __init__(self,movie,day,show_time):
+    def __init__(self,movie:str,day:str,show_time:str):
+        ''' three main attributes are defined in this function'''
+
+
         self.movie = movie
         self.day = day
         self.show_time = show_time
@@ -23,8 +26,8 @@ class Movies():
 
 
 
-
-    def show_time_setter(self,show_time,day):
+    def show_time_setter(self,show_time:str,day:str) -> str | None:
+        ''' only valid show times are allowed to set'''
 
         Clear_screan()
 
@@ -55,7 +58,9 @@ class Movies():
 
 
 
-    def day_setter(self,movie,day):
+    def day_setter(self,movie:str,day:str) ->None:
+        ''' only valid days are allowed to set'''
+
 
         Clear_screan()
 
@@ -77,11 +82,14 @@ class Movies():
 class Purchas(Movies):
 
     def __init__(self,movie,day,show_time):
+        ''' three main attributes are defined in this function'''
+
         super().__init__(movie,day,show_time)
 
 
     @classmethod
-    def Date_format(cls):
+    def Date_format(cls) -> (str,str):
+        '''Getting the date of birth and registration date of the user from the database and sending them to the relevant functions'''
 
         birthday = cls.user_data[cls.Username][4]
         date_format1 = "%Y-%m-%d"
@@ -97,13 +105,15 @@ class Purchas(Movies):
 
 
     @classmethod
-    def Choose(cls,Username,user_data):
+    def Choose(cls,Username:str,user_data:dict) ->None:
+        ''' it allows the user to choose between viewing Cinema Program and purchasing Cinema Ticket '''
+
 
         cls.Username = Username
         cls.user_data = user_data
         cls.wallet_id = user_data[Username][2]
 
-        cls.Movies_dict = Nosql_database.Get_Movies()
+        cls.Movies_dict = Nosql_database.Movies_info()
 
         Clear_screan()
 
@@ -137,11 +147,12 @@ class Purchas(Movies):
 
 
     @classmethod
-    def Select(cls):
+    def Select(cls) ->None:
+        '''Selection of the movie and its playback time by the user'''
 
         Clear_screan()
 
-        Movies = Nosql_database.Get_Movies()
+        Movies = Nosql_database.Movies_info()
 
         Movies = list(Movies.keys())
 
@@ -191,7 +202,8 @@ class Purchas(Movies):
 
 
     @classmethod
-    def Limit(cls,movie,show_time,day):
+    def Limit(cls,movie:str,show_time:str,day:str)->None:
+        '''Applying the limits specified by the cinema to buy tickets'''
 
         Clear_screan()
 
@@ -220,7 +232,8 @@ class Purchas(Movies):
 
 
     @classmethod
-    def Apply_discount(cls,price):
+    def Apply_discount(cls,price:int) -> int:
+        '''Applying the discounts determined by the cinema for buying tickets'''
 
         Clear_screan()
 
@@ -256,7 +269,8 @@ class Purchas(Movies):
 
 
     @classmethod
-    def Buy(cls,movie,day,show_time,capacity,price):
+    def Buy(cls,movie:str,day:str,show_time:str,capacity:int,price:int)->None:
+        '''purchasing tickets with a wallet or bank account'''
 
         Clear_screan()
 
@@ -341,7 +355,9 @@ class View_seat(Movies):
     morning_start, afternoon_start, night_start = None, None, None
 
     @classmethod
-    def Calc_date_range(cls):
+    def Calc_date_range(cls) -> str:
+        '''Creating a 7-day variable interval (including today and the next six days)'''
+
         today = datetime.now()
 
         further_date = today + timedelta(days=6)
@@ -352,7 +368,8 @@ class View_seat(Movies):
 
 
     @classmethod
-    def Cinema_program(cls,Movies_dict):
+    def Cinema_program(cls,Movies_dict:dict) ->None:
+        '''Receiving the 6 days later cinema program from the database and displaying it to the user'''
 
         Clear_screan()
 
@@ -410,9 +427,8 @@ class View_seat(Movies):
 
 
     @classmethod
-    def Show_Time(cls,key,Movies_dict,now):
-
-        #Clear_screan()
+    def Show_Time(cls,key:list,Movies_dict:dict,now:datetime)-> None:
+        '''Receiving today's cinema program from the database and displaying it to the user'''
 
         day = now.strftime('%A')
         now = now.time()
@@ -463,8 +479,8 @@ class View_seat(Movies):
 
 
     @classmethod
-    def Auto_Change_capacity(cls,Movies_dict,movie,start_times,day,now):
-
+    def Auto_Change_capacity(cls,Movies_dict:dict,movie:str,start_times:str,day:str,now:str)->None:
+        '''Updating the movie capacity automatically by the program after the end of the day'''
 
         if  max(start_times) < now :
 
@@ -477,7 +493,6 @@ class View_seat(Movies):
             Nosql_database.Update_Movies(Movies_dict)
 
             logging.info(f'آپدیت کردن ظرفیت فیلم پس از پایان روز.\n')
-
 
 
 

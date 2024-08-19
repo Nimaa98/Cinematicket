@@ -3,7 +3,7 @@
 
 import getpass ,logging
 from noSQL_Database import Nosql_database
-from datetime import datetime
+from datetime import datetime , time
 from bank_acounts import Clear_screan
 
 
@@ -14,13 +14,16 @@ class Admin_application():
 	Admin_info = {}
 
 	
-	def __init__(self,Username,password):
+	def __init__(self,Username:str,password:str):
+		''' two main attributes are defined in this function'''
+
 		self.Username = Username
 		self.password = password
 
 		
 		
-	def Set_Username(self,Username):
+	def Set_Username(self,Username:str) -> None:
+		''' only valid names are allowed to register'''
 
 		if 19<len(Username)<39:
 
@@ -32,7 +35,8 @@ class Admin_application():
 			raise ValueError
 
 	
-	def Set_password(self,password):
+	def Set_password(self,password:str)->None:
+		''' only valid passwords are allowed to register '''
 
 		Clear_screan()
 
@@ -48,7 +52,8 @@ class Admin_application():
 
 
 	@classmethod
-	def Sign_up(cls,Username):
+	def Sign_up(cls,Username:str) -> None|bool:
+		''' registers new Admins'''
 
 		Clear_screan()
 
@@ -75,7 +80,8 @@ class Admin_application():
 		return True
 
 	@staticmethod
-	def Login(password,Username):
+	def Login(password:str,Username:str)-> None:
+		''' if the correct information is enterd, the Admin will be allowed to enter the account'''
 
 		Clear_screan()
 
@@ -96,7 +102,8 @@ class Admin_application():
 
 
 	@staticmethod
-	def Account():
+	def Account() -> None:
+		''' it allows the Admin to choose between adding new movie and deleting movie'''
 
 		Clear_screan()
 
@@ -114,7 +121,7 @@ class Admin_application():
 			elif a== '2':
 				logging.info(f'اقدام ادمین برای حذف کردن فیلم از سایت.\n')
 
-				Admin_application.Delet_Movie()
+				Admin_application.Delete_Movie()
 
 			elif a == '0':
 				logging.info(f'خروج ادمین از حساب کاربری.\n')
@@ -128,11 +135,11 @@ class Admin_application():
 
 
 	@staticmethod
-	def Delet_Movie():
-
+	def Delete_Movie() -> None:
+		'''Deletes the selected movie from the database'''
 		Clear_screan()
 
-		Movies = Nosql_database.Get_Movies()
+		Movies = Nosql_database.Movies_info()
 
 		Movies = list(Movies.keys())
 
@@ -151,15 +158,13 @@ class Admin_application():
 
 		if Movie in Movies:
 			print('\nEntered movie was daleted.\n')
-			Nosql_database.Delet_Movie(Movie)
+			Nosql_database.Delete_Movie(Movie)
 			logging.info(f'پاک شدن موفقیت آمیز فیلم از سایت.\n')
 
 
 		else:
 			print('\nIncorrect name.try again later\n')
 			logging.warning('.عدم اجرای درخواست ادمین به دلیل وارد کردن نام فیلم به صورت نادرست\n')
-
-			# Clear_screan()
 
 
 
@@ -171,6 +176,8 @@ class New_Movie():
 
 	def __init__(self,Movie_latin_name,Movie_farsi_name,Days_num_of_week,
 				 Show_times,Capacity,Genre,Price,Permissible_age):
+		''' nine main attributes are defined in this function'''
+
 
 
 		self.Movie_latin_name ,  self.Movie_farsi_name = Movie_latin_name , Movie_farsi_name
@@ -180,7 +187,8 @@ class New_Movie():
 		self.Permissible_age = Permissible_age
 
 
-	def Set_Movie_latin_name(self,Movie_latin_name):
+	def Set_Movie_latin_name(self,Movie_latin_name:str)-> None:
+		''' only valid Movie latin names are allowed to set'''
 
 		Clear_screan()
 
@@ -207,7 +215,9 @@ class New_Movie():
 		self.Movie_latin_name = Movie_latin_name
 
 
-	def Set_Movie_farsi_name(self,Movie_farsi_name):
+	def Set_Movie_farsi_name(self,Movie_farsi_name:str)-> None:
+		''' only valid Movie farsi names are allowed to set'''
+
 
 		Clear_screan()
 
@@ -248,7 +258,9 @@ class New_Movie():
 		self.Movie_farsi_name = Movie_farsi_name
 
 
-	def Set_Show_times(self,times):
+	def Set_Show_times(self,times:str)-> None:
+		''' only valid Show times are allowed to set'''
+
 
 		Clear_screan()
 
@@ -291,7 +303,9 @@ class New_Movie():
 
 
 	@staticmethod
-	def Set_Start_time(Start_time):
+	def Set_Start_time(Start_time:str)-> str|None|time:
+		''' only valid Start times are allowed to set'''
+
 
 		Clear_screan()
 
@@ -309,10 +323,12 @@ class New_Movie():
 
 		else:
 			Time = ''
-			return  Time
+			return Time
 
 
-	def Set_Capacity(self,capacity):
+	def Set_Capacity(self,capacity:str)->None:
+		''' only valid Capaciteis are allowed to set'''
+
 
 		Clear_screan()
 
@@ -328,7 +344,8 @@ class New_Movie():
 
 
 
-	def Set_Days_num_of_week(self,Days_num_of_week):
+	def Set_Days_num_of_week(self,Days_num_of_week:str)->None:
+		''' only valid Days number of week are allowed to set'''
 
 		Clear_screan()
 
@@ -377,7 +394,8 @@ class New_Movie():
 
 
 
-	def Set_Genre(self,genre):
+	def Set_Genre(self,genre:str)->None:
+		''' only valid genres are allowed to set'''
 
 		Clear_screan()
 
@@ -398,7 +416,8 @@ class New_Movie():
 
 
 
-	def Set_Price(self,price):
+	def Set_Price(self,price:str)->None:
+		''' only valid prices are allowed to set'''
 
 		Clear_screan()
 
@@ -412,7 +431,9 @@ class New_Movie():
 
 			raise ValueError
 
-	def Set_Permissible_age(self,age):
+	def Set_Permissible_age(self,age:str)->None:
+		''' only valid Permissible ages are allowed to set'''
+
 
 		Clear_screan()
 
@@ -440,7 +461,8 @@ class New_Movie():
 
 
 	@classmethod
-	def Add_Movie(cls):
+	def Add_Movie(cls)->None:
+		'''Adding movie to the site if the entered information is correct'''
 
 		logging.info('دریافت اطلاعات مورد نیاز فیلم از ادمین برای وارد کردن فیلم در سایت.\n')
 

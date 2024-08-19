@@ -7,20 +7,26 @@ from noSQL_Database import Nosql_database
 
 
 
-def Clear_screan():
+def Clear_screan() -> None:
+    ''' Clears the screen'''
+
     os.system('clear')
 
 
 class Bank(ABC):
     user_accounts = {}
 
-    def __init__(self,cart_number,name,cvv2,password,balance):
+    def __init__(self,cart_number:str,name:str,cvv2:str,password:str,balance:int):
+        ''' five main attributes are defined in this function'''
+
+
         self.name , self._balance = name,balance
         self.cart_number, self.cvv2 = cart_number,cvv2
         self.__password = password
 
 
-    def set_Cart_number(self,cart_number):
+    def set_Cart_number(self,cart_number:str) -> None:
+        ''' only valid cart number are allowed to set'''
 
         Clear_screan()
 
@@ -38,12 +44,13 @@ class Bank(ABC):
             raise ValueError
 
 
-    def Cart_number(self):
+    def Cart_number(self) -> str:
         return self.cart_number
 
 
 
-    def set_CVV2(self, cvv2):
+    def set_CVV2(self, cvv2:str) -> None:
+        ''' only valid CVV2 are allowed to set'''
 
         Clear_screan()
 
@@ -55,11 +62,12 @@ class Bank(ABC):
             raise ValueError
 
 
-    def CVV2(self):
+    def CVV2(self) -> str:
         return self.cvv2
 
 
-    def set_Password(self, password):
+    def set_Password(self, password:str) -> None:
+        ''' only valid password are allowed to set'''
 
         Clear_screan()
 
@@ -71,12 +79,13 @@ class Bank(ABC):
             logging.warning('.عدم اجرای درخواست کاربر به دلیل وارد کردن پسورد نادرست\n')
             raise ValueError
 
-    def Password(self):
+    def Password(self) -> str:
         return self.__password
 
 
 
-    def set_Owner_name(self, owner_name):
+    def set_Owner_name(self, owner_name:str) -> None:
+        ''' only valid owner name are allowed to set'''
 
         Clear_screan()
 
@@ -88,8 +97,9 @@ class Bank(ABC):
             logging.warning('عدم اجرای درخواست کاربر به دلیل اینکه نام صاحب حساب اشتباه وارد شده است.\n')
             raise ValueError
 
-    def Owner_name(self):
+    def Owner_name(self) -> str:
         return self.owner_name
+
 
 
 class Bank_accounts(Bank):
@@ -99,15 +109,17 @@ class Bank_accounts(Bank):
     Transaction_fees = 600
 
 
-    def __init__(self,cart_number,name,cvv2,password,balance):
+    def __init__(self,cart_number:str,name:str,cvv2:str,password:str,balance:int):
+        ''' it inherits the five main attributes from the parent class'''
+
         super().__init__(cart_number,name,cvv2,password,balance)
 
 
 
 
-
     @classmethod
-    def Add_amount(cls,Username,user_data,cart_number,cart_info,amount):
+    def Add_amount(cls,Username:slice,user_data:dict,cart_number:slice,cart_info:dict,amount:int) -> None:
+        '''Add balance to user account'''
 
         Clear_screan()
 
@@ -120,8 +132,10 @@ class Bank_accounts(Bank):
         print(f'The transaction was completed successfully.\n')
         logging.info('انجام موفقیت آمیز تراکنش .\n')
 
+
     @classmethod
-    def Sub_amount(cls, Username, user_data, cart_number, cart_info, amount):
+    def Sub_amount(cls, Username:slice, user_data:dict, cart_number:slice, cart_info:dict, amount:int) -> int| None:
+        '''Balance deduction from user account'''
 
         Clear_screan()
 
@@ -147,6 +161,7 @@ class Bank_accounts(Bank):
             user_data[Username][6][cart_number][3] = balance
             Nosql_database.Add(user_data)
             return amount
+
         else:
             print('\ncvv2 or password is incorrect.\ntry again later.\n')
             logging.warning('عدم اجرای درخواست کاربر به دلیل اینکه password یا CVV2 اشتباه وارد شده است.\n')
@@ -156,9 +171,9 @@ class Bank_accounts(Bank):
 
 
 
-
     @classmethod
-    def Transfer(cls,Username, user_data, cart_number, cart_info, amount,cart_dest_number):
+    def Transfer(cls,Username:slice, user_data:dict, cart_number:slice, cart_info:dict, amount:int,cart_dest_number:str) -> None:
+        '''Checking the information received from the user and the possibility of transferring money'''
 
         Clear_screan()
 
@@ -199,7 +214,8 @@ class Bank_accounts(Bank):
 
 
     @classmethod
-    def Transfer_result(cls,Username, user_data, cart_number, amount,cart_dest_number,other_Username,other_user_data):
+    def Transfer_result(cls,Username:slice, user_data:dict, cart_number:slice, amount:int,cart_dest_number:str,other_Username:slice,other_user_data:dict) -> None:
+        '''Transfer money from the source account to the destination account'''
 
         Clear_screan()
 
@@ -236,7 +252,8 @@ class Bank_accounts(Bank):
 
 
     @staticmethod
-    def Manage_accounts(Username,user_data):
+    def Manage_accounts(Username:str,user_data:dict) -> None:
+        ''' it allows the user to choose between Adding bank account,View accounts and balance changing'''
 
         Clear_screan()
 
@@ -281,7 +298,8 @@ class Bank_accounts(Bank):
 
 
     @classmethod
-    def Add_account(cls,Username,user_data):
+    def Add_account(cls,Username:str,user_data:dict) -> None:
+        '''Adding new bank account'''
 
         Clear_screan()
 
@@ -313,7 +331,8 @@ class Bank_accounts(Bank):
 
 
     @classmethod
-    def Show_accounts(cls,Username,user_data):
+    def Show_accounts(cls,Username:str,user_data:dict) -> None:
+        '''View current accounts'''
 
         Clear_screan()
 
@@ -359,7 +378,8 @@ class Bank_accounts(Bank):
 class Change_Balance(Bank_accounts):
 
     @staticmethod
-    def Select_cart(Username,user_data):
+    def Select_cart(Username:str,user_data:dict) -> tuple[str,str] | tuple[None,None]:
+        '''Select a bank card to make the transaction'''
 
         Clear_screan()
 
@@ -394,7 +414,8 @@ class Change_Balance(Bank_accounts):
 
 
     @staticmethod
-    def Check_digit(amount):
+    def Check_digit(amount:str) -> (bool,int):
+        '''The amount entered for the transaction must be an integer'''
 
         Clear_screan()
 
@@ -411,7 +432,8 @@ class Change_Balance(Bank_accounts):
 
 
     @staticmethod
-    def Manage_Balance(Username,user_data,cart_number,cart_info):
+    def Manage_Balance(Username:slice,user_data:dict,cart_number:slice,cart_info:dict) -> None:
+        ''' it allows the user to change his balance by add ,sub and transfer options'''
 
         Clear_screan()
 

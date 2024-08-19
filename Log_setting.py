@@ -2,7 +2,7 @@
 import logging
 
 
-def Log_config():
+def Log_config()->None:
 
     logging.basicConfig(
         filename= 'CinemaTicket.log',
